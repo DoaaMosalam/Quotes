@@ -14,18 +14,24 @@ import java.util.concurrent.TimeUnit
 object ApiService {
     fun getService():ApiQuotes{
         // API response interceptor
-        val loggingInterceptor = HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
-        // Client
-        val client = OkHttpClient.Builder().addInterceptor(loggingInterceptor)
-            .connectTimeout(60, TimeUnit.SECONDS)
-            .writeTimeout(60, TimeUnit.SECONDS)
-            .readTimeout(60, TimeUnit.SECONDS)
-            .build()
+
         val builder = Retrofit.Builder()
             .baseUrl(Credential.BASE_URL)
-            .client(client)
+            .client(okHttpClient())
             .addConverterFactory(GsonConverterFactory.create())
         val retrofit = builder.build()
         return retrofit.create(ApiQuotes::class.java)
+    }
+    private fun okHttpClient():OkHttpClient{
+        val loggingInterceptor = HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
+        // Client
+        val client = OkHttpClient.Builder().addInterceptor(loggingInterceptor)
+            .hostnameVerifier { _, _ -> true }
+            .connectTimeout(60, TimeUnit.SECONDS)
+            .writeTimeout(60, TimeUnit.SECONDS)
+            .readTimeout(60, TimeUnit.SECONDS)
+        client.addInterceptor(loggingInterceptor)
+        return client.build()
+
     }
 }
