@@ -1,15 +1,16 @@
 package pojo
 
-import android.os.Parcel
-import android.os.Parcelable
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 import kotlinx.serialization.Serializable
 
 
 @Serializable
 data class Quotes(
-    @SerializedName("_id")
-    val _id: String,
+    @SerializedName("id")
+    val id: String,
     val author: String,
     val content: String,
     val tags: List<String>,

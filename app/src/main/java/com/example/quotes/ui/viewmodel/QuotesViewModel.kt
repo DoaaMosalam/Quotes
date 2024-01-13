@@ -1,15 +1,13 @@
 package com.example.quotes.ui.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import pojo.Quotes
-import pojo.QuotesResponse
 import repository.QuotesRepository
-import storage.roomdata.QuotesDAO
+import util.RequestStatus
 
 class QuotesViewModel(
     private val quotesRepository: QuotesRepository
@@ -24,14 +22,35 @@ class QuotesViewModel(
 
     fun loadQuotes() {
         viewModelScope.launch {
-            try {
-                val quotesList = quotesRepository.getQuotes()
-                _quotes.value = quotesList
-            } catch (e: Exception) {
-                val errorMessage = "Error loading quotes: ${e.message}"
-                _error.value = errorMessage
-                Log.e("QuotesViewModel", errorMessage, e)
+            quotesRepository.getQuotes().collect { requestStatus ->
+                when (requestStatus) {
+                    is RequestStatus.Waiting -> {
+                        _isLoad.value = true
+                    }
+                    is RequestStatus.Success -> {
+                        _isLoad.value = false
+                        _quotes.value = requestStatus.data.results
+                    }
+                    is RequestStatus.Error -> {
+                        _isLoad.value = false
+                        _error.value = requestStatus.message
+                    }
+
+                }
             }
         }
     }
+
+//    suspend fun getQuotesFromDatabase(): LiveData<List<QuotesEntity>>  {
+//        return quotesRepository.getQuotesFromDatabase()
+//    }
+//    fun updateQuoteType(key: String, quoteT: String) {
+//        viewModelScope.launch {
+//            quotesRepository.updateQuoteType(key, quoteT)
+//        }
+//    }
 }
+
+
+
+
