@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import com.example.quotes.R
 import com.example.quotes.databinding.FragmentQuotesBinding
@@ -28,6 +27,7 @@ class QuotesFragment : Fragment(), View.OnClickListener {
 
     // set initial full heart red color
     private var isHeartFull = false
+
     // set initial background button
     var isWhite = true
 
@@ -39,7 +39,7 @@ class QuotesFragment : Fragment(), View.OnClickListener {
         bindingQuotes =
             DataBindingUtil.inflate(inflater, R.layout.fragment_quotes, container, false)
 //==================================================================================================
-       //call view model provider factory to get data from api
+        //call view model provider factory to get data from api
         //call class MyApplication to get data from api
 //        val myApplication = (requireActivity().application as MyApplication).quotesRepository
 //        val quotesViewModel = ViewModelProvider(this, QuotesViewModelFactory(myApplication))[QuotesViewModel::class.java]
@@ -48,7 +48,7 @@ class QuotesFragment : Fragment(), View.OnClickListener {
         val database = QuotesDatabase.getInstance(requireContext())
         val quotesRepository = QuotesRepository(apiQuotes, database)
         val viewModelFactory = QuotesViewModelFactory(quotesRepository)
-         mViewModel = ViewModelProvider(this, viewModelFactory)[QuotesViewModel::class.java]
+         mViewModel= ViewModelProvider(this, viewModelFactory)[QuotesViewModel::class.java]
 
 //==================================================================================================
         //call view model provider to get data from api
@@ -57,21 +57,22 @@ class QuotesFragment : Fragment(), View.OnClickListener {
 //            this,
 //            QuotesViewModelFactory(QuotesRepository(ApiService.getService()))
 //        )[QuotesViewModel::class.java]
-        //=======================================
-//        mViewModel.loadQuotes()
+
+        //---------------------------------------
         setUpObserver()
         //=======================================
+
         return bindingQuotes.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
         super.onViewCreated(view, savedInstanceState)
         bindingQuotes.btnQutoes.setOnClickListener(this)
         bindingQuotes.btnHeart.setOnClickListener(this)
         bindingQuotes.btnShare.setOnClickListener(this)
 
     }
+
     override fun onClick(v: View?) {
         if (v != null) {
             when (v.id) {
@@ -134,8 +135,8 @@ class QuotesFragment : Fragment(), View.OnClickListener {
 
             } else {
                 bindingQuotes.txtQuotes.text = buildString {
-        append("Quotes No Available")
-    }
+                    append("Quotes No Available")
+                }
             }
         }
         // Observe the error LiveData to handle any errors
@@ -146,14 +147,14 @@ class QuotesFragment : Fragment(), View.OnClickListener {
     }
 
     private fun observeButtonClick() {
-        // Call loadQuotes() to fetch new quotes when the button is clicked
-        mViewModel.loadQuotes()
+        mViewModel.getQuotesAndInsert()
     }
 
     //Save data in shared preference
     private fun saveData() {
         SharedPreferencesManager(requireActivity().baseContext).saveQuotes(bindingQuotes.txtQuotes.text.toString())
     }
+
     // change heart color when click button heart to red color and return to white color when click again and save data in shared preference
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun changeHeartColor() {
