@@ -7,6 +7,7 @@ import kotlinx.coroutines.withContext
 import pojo.Quotes
 import pojo.QuotesResponse
 import retrofit2.Response
+import storage.roomdata.QuotesDAO
 
 import storage.roomdata.QuotesDatabase
 import storage.roomdata.QuotesEntity
@@ -16,28 +17,49 @@ import util.RequestStatus
 
 class QuotesRepository (
     private val apiQuotes: ApiQuotes,
-   private val  quotesDatabase: QuotesDatabase
+   private val quotesDatabase: QuotesDatabase
 ) {
     private val quotesDAO = quotesDatabase.quotesDatabaseDao()
 
     //create function to get data from api and insert it to database
-    suspend fun fetchAndInsertQuotes() = flow {
-        emit(RequestStatus.Waiting)
-        try {
-            val response: Response<QuotesResponse> = apiQuotes.getQuotes()
 
-            if (response.isSuccessful) {
-                emit(RequestStatus.Success(response.body()!!))
-            } else {
-                emit(
-                    RequestStatus.Error(
-                        response.errorBody()?.byteStream()?.reader()?.readText()
-                            ?: "Unknown error"
-                    )
-                )
+    suspend fun fetchAndInsertQuotes(){
+        withContext(Dispatchers.IO){
+            try {
+                val response = apiQuotes.getQuotes()
+                if (response.isSuccessful){
+                    response.body()!!
+
+                }else{
+                    Log.i("TAG", "fetchAndInsertQuotes: ")
+                }
+
+            }catch (e:Exception){
+                Log.d("TAG", "fetchAndInsertQuotes: ${e.message}")
             }
-        } catch (e: Exception) {
-            emit(RequestStatus.Error(e.message ?: "An error occurred"))
         }
     }
+
+
+
+
+//    suspend fun fetchAndInsertQuotes() = flow {
+//        emit(RequestStatus.Waiting)
+//        try {
+//            val response: Response<QuotesResponse> = apiQuotes.getQuotes()
+//
+//            if (response.isSuccessful) {
+//                emit(RequestStatus.Success(response.body()!!))
+//            } else {
+//                emit(
+//                    RequestStatus.Error(
+//                        response.errorBody()?.byteStream()?.reader()?.readText()
+//                            ?: "Unknown error"
+//                    )
+//                )
+//            }
+//        } catch (e: Exception) {
+//            emit(RequestStatus.Error(e.message ?: "An error occurred"))
+//        }
+//    }
 }

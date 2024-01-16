@@ -23,25 +23,50 @@ class QuotesViewModel(
     val error: LiveData<String> get() = _error
 
     // Function to fetch quotes from API and insert them into Room Database
-    fun getQuotesAndInsert() {
+
+    fun fetchAndInsertQuotes() {
         viewModelScope.launch {
-            quotesRepository.fetchAndInsertQuotes().collect() { requestStatus ->
-                when (requestStatus) {
-                    is RequestStatus.Success -> {
-                        _quotes.postValue(requestStatus.data.results)
-                        _isLoad.postValue(false)
-                    }
-                    is RequestStatus.Error -> {
-                        _error.postValue(requestStatus.message)
-                        _isLoad.postValue(false)
-                    }
-                    is RequestStatus.Waiting -> {
-                        _isLoad.postValue(true)
-                    }
-                }
+            try {
+                _isLoad.value = true
+                quotesRepository.fetchAndInsertQuotes()
+                _isLoad.value = false
+            } catch (e: Exception) {
+                // Handle exceptions
+                _isLoad.value = false
+                _error.value = "An error occurred."
             }
         }
     }
+
+
+
+
+
+
+
+
+
+
+
+//    fun getQuotesAndInsert() {
+//        viewModelScope.launch {
+//            quotesRepository.fetchAndInsertQuotes().collect() { requestStatus ->
+//                when (requestStatus) {
+//                    is RequestStatus.Success -> {
+//                        _quotes.postValue(requestStatus.data.results)
+//                        _isLoad.postValue(false)
+//                    }
+//                    is RequestStatus.Error -> {
+//                        _error.postValue(requestStatus.message)
+//                        _isLoad.postValue(false)
+//                    }
+//                    is RequestStatus.Waiting -> {
+//                        _isLoad.postValue(true)
+//                    }
+//                }
+//            }
+//        }
+//    }
 
 
 }
