@@ -10,11 +10,11 @@ import androidx.room.Query
 interface QuotesDAO {
    // get all quotes from database
     @Query("SELECT * FROM QUOTES_TABLE ORDER BY id DESC")
-    fun getAllQuotes(): LiveData<List<QuotesEntity>>
+    fun getAllQuotesFromData(): List<QuotesEntity>
 
     //insert quotes into database
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertQuoteToDatabase(quotes: QuotesEntity)
+    suspend fun insertQuoteToDatabase(quotes: List<QuotesEntity>)
 
     //search quotes from database by author and content
     @Query("SELECT * FROM QUOTES_TABLE WHERE author LIKE :search OR content LIKE :search")
