@@ -10,13 +10,11 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import com.example.quotes.R
 import com.example.quotes.databinding.FragmentQuotesBinding
 import com.example.quotes.ui.viewmodel.QuotesViewModel
 import com.example.quotes.ui.viewmodel.QuotesViewModelFactory
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.coroutines.launch
 import repository.QuotesRepository
 import storage.SharedPreferencesManager
 import storage.roomdata.QuotesDatabase
@@ -61,7 +59,6 @@ class QuotesFragment : Fragment(), View.OnClickListener {
 //        )[QuotesViewModel::class.java]
 
         //---------------------------------------
-        mViewModel.fetchAndInsertQuotes()
         setUpObserver()
         //=======================================
 
@@ -74,9 +71,6 @@ class QuotesFragment : Fragment(), View.OnClickListener {
         bindingQuotes.btnHeart.setOnClickListener(this)
         bindingQuotes.btnShare.setOnClickListener(this)
 
-    }
-    private fun observeButtonClick() {
-        mViewModel.getAllQuotesFromData()
     }
 
     override fun onClick(v: View?) {
@@ -152,6 +146,9 @@ class QuotesFragment : Fragment(), View.OnClickListener {
         }
     }
 
+    private fun observeButtonClick() {
+        mViewModel.getQuotesAndInsert()
+    }
 
     //Save data in shared preference
     private fun saveData() {
