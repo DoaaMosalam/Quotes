@@ -10,16 +10,15 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import com.example.quotes.R
 import com.example.quotes.databinding.FragmentQuotesBinding
 import com.example.quotes.ui.viewmodel.QuotesViewModel
 import com.example.quotes.ui.viewmodel.QuotesViewModelFactory
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.coroutines.launch
 import repository.QuotesRepository
 import storage.SharedPreferencesManager
 import storage.roomdata.QuotesDatabase
+import storage.roomdata.QuotesEntity
 import util.ApiService
 import util.ShareQuotes
 
@@ -50,9 +49,8 @@ class QuotesFragment : Fragment(), View.OnClickListener {
         val database = QuotesDatabase.getInstance(requireContext())
         val quotesRepository = QuotesRepository(apiQuotes, database)
         val viewModelFactory = QuotesViewModelFactory(quotesRepository)
-         mViewModel= ViewModelProvider(this, viewModelFactory)[QuotesViewModel::class.java]
-
-//==================================================================================================
+        mViewModel = ViewModelProvider(this, viewModelFactory)[QuotesViewModel::class.java]
+        //==========================================================================================
         //call view model provider to get data from api
 
 //        ViewModelProvider(
@@ -61,7 +59,7 @@ class QuotesFragment : Fragment(), View.OnClickListener {
 //        )[QuotesViewModel::class.java]
 
         //---------------------------------------
-        mViewModel.fetchAndInsertQuotes()
+        fetchQuotes()
         setUpObserver()
         //=======================================
 
@@ -75,9 +73,11 @@ class QuotesFragment : Fragment(), View.OnClickListener {
         bindingQuotes.btnShare.setOnClickListener(this)
 
     }
-    private fun observeButtonClick() {
-        mViewModel.getAllQuotesFromData()
+
+    private fun fetchQuotes() {
+        mViewModel.fetchQuotes()
     }
+
 
     override fun onClick(v: View?) {
         if (v != null) {
@@ -118,8 +118,13 @@ class QuotesFragment : Fragment(), View.OnClickListener {
         }
     }
 
+    private fun observeButtonClick() {
+        mViewModel.getAllQuotes()
+    }
+
     // implementation when click button quotes to get quotes from api
     private fun setUpObserver() {
+
         mViewModel.isLoad.observe(viewLifecycleOwner)
         { isLoad ->
             if (isLoad) {
@@ -129,21 +134,9 @@ class QuotesFragment : Fragment(), View.OnClickListener {
             }
         }
 
-        // Observe the quotes LiveData to update the UI with new quotes when the quotes are ready
-        mViewModel.quotes.observe(viewLifecycleOwner) { quotesList ->
-            //get quotes random from api
-            if (quotesList.isNotEmpty()) {
-                val shuffledList = quotesList.shuffled()
-                val randomQuote = shuffledList.last()
-                // Display the content and author in a custom way
-                val formattedQuote = "\"${randomQuote.content}\" \n- ${randomQuote.author}"
-                bindingQuotes.txtQuotes.text = formattedQuote
-
-            } else {
-                bindingQuotes.txtQuotes.text = buildString {
-                    append("Quotes No Available")
-                }
-            }
+        //Observe the quotes LiveData to update the UI with new quotes when the quotes are ready
+        mViewModel.quotes.observe(viewLifecycleOwner) { quotes ->
+            displayRandomQuote(quotes)
         }
         // Observe the error LiveData to handle any errors
         mViewModel.error.observe(viewLifecycleOwner) { errorMessage ->
@@ -152,6 +145,20 @@ class QuotesFragment : Fragment(), View.OnClickListener {
         }
     }
 
+    //  get quotes random from api
+    private fun displayRandomQuote(quotes: List<QuotesEntity>) {
+        if (quotes.isNotEmpty()) {
+            val shuffledList = quotes.shuffled()
+            val randomQuote = shuffledList.last()
+            // Display the content and author in a custom way
+            val formattedQuote = "\"${randomQuote.content}\" \n- ${randomQuote.author}"
+            bindingQuotes.txtQuotes.text = formattedQuote
+        } else {
+            bindingQuotes.txtQuotes.text = buildString {
+                append("Quotes No Available")
+            }
+        }
+    }
 
     //Save data in shared preference
     private fun saveData() {

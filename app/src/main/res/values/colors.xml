@@ -5,4 +5,22 @@
     <color name="backgroundColor">#5D13E7</color>
     <color name="background">#8249B5</color>
     <color name="button_color">#FBFBFBB2</color>
+    <color name="blue">#4C62FF</color>
+
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+
+
+    <color name="dark_grey">#323f44</color>
+    <color name="red">#B31312</color>
+    <color name="blue_dark">#2B2A4C</color>
+    <color name="blue_20">#332B2A4C</color>
+    <color name="orange">#EA906C</color>
+    <color name="used_grey">#EEE2DE</color>
+    <color name="grey">#7a8488</color>
+    <color name="light_grey">#939ca4</color>
+    <color name="lighter_grey">#c6c9c7</color>
 </resources>

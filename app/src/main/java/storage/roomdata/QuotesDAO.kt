@@ -10,7 +10,7 @@ import androidx.room.Query
 interface QuotesDAO {
    // get all quotes from database
     @Query("SELECT * FROM QUOTES_TABLE ORDER BY id DESC")
-    fun getAllQuotesFromData(): List<QuotesEntity>
+    fun getAllQuotesFromData(): LiveData<List<QuotesEntity>>
 
     //insert quotes into database
     @Insert(onConflict = OnConflictStrategy.IGNORE)

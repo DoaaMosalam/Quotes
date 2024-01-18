@@ -5,71 +5,66 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import pojo.Quotes
+import storage.roomdata.QuotesDAO
 import storage.roomdata.QuotesDatabase
 import storage.roomdata.QuotesEntity
 import util.ApiQuotes
 
 
-class QuotesRepository (
+class QuotesRepository(
     private val apiQuotes: ApiQuotes,
-   private val quotesDatabase: QuotesDatabase
-) {
+    private val quotesDatabase: QuotesDatabase
 
-    val quotesDAO = quotesDatabase.quotesDatabaseDao()
+) {
+    private val quotesDAO = quotesDatabase.quotesDatabaseDao()
+
  //Function to fetch quotes from the API and insert them into the Room database
-    suspend fun fetchQuotesAndInsertIntoDatabase():Boolean {
-        return withContext(Dispatchers.IO) {
-            try {
-                val response = apiQuotes.getQuotes()
-                if (response.isSuccessful){
-                    val result = response.body()?.results
-                    result?.let {
-                        val quotesEntity =it.map { quotes ->
-                            QuotesEntity(
-                               id = quotes.id.toLong(),
-                                quoteType = "REGULAR",
-                                author = quotes.author,
-                                content = quotes.content,
-                                tags = quotes.tags,
-                                authorSlug =   quotes.authorSlug,
-                                length = quotes.length,
-                               dateAdded = quotes.dateAdded,
-                                dateModified = quotes.dateModified
-                            )
-                        }
-                        quotesDAO.insertQuoteToDatabase(quotesEntity)
-                        return@withContext true
-                    }
-                }
-                return@withContext false
-            } catch (e: Exception) {
-                return@withContext false
-            }
+ suspend fun fetchQuotes() {
+     try {
+         val response = apiQuotes.getQuotes()
+         if (response.isSuccessful) {
+             val quotesResponse = response.body()
+             quotesResponse?.let { saveQuotesToDatabase(it.results) }
+         } else {
+             Log.e("TAG", "getQuoteFromServerToDatabase: ${response.body()}")
+         }
+     } catch (e: Exception) {
+         Log.e("error", "getQuoteFromServerToDatabase: $e")
+     }
+ }
+
+    private suspend fun saveQuotesToDatabase(quotes: List<Quotes>) {
+        val quotesEntities = quotes.map {
+            QuotesEntity(
+                0, // Auto-generated ID
+                "REGULAR", // You may set a default quoteType
+                it.author,
+                it.content,
+                it.tags,
+                it.authorSlug,
+                it.length,
+                it.dateAdded,
+                it.dateModified
+            )
         }
+        quotesDAO.insertQuoteToDatabase(quotesEntities)
     }
 
-    // Function to get all quotes from the Room database
-    fun getAllQuotesFromDatabase(): List<QuotesEntity> {
+    fun getAllQuotesFromDatabase(): LiveData<List<QuotesEntity>> {
         return quotesDAO.getAllQuotesFromData()
     }
 
-    // Function to search quotes from the Room database by author and content
-    fun searchQuotes(query: String): LiveData<List<QuotesEntity>> {
-        return quotesDAO.searchQuotes("%$query%")
+    fun searchQuotesFromDatabase(search: String): LiveData<List<QuotesEntity>> {
+        return quotesDAO.searchQuotes("%$search%")
     }
 
-    // Function to delete all quotes from the Room database
-    suspend fun deleteAllQuotes() {
-        withContext(Dispatchers.IO) {
-            quotesDAO.deleteAllQuotes()
-        }
+    suspend fun deleteAllQuotesFromDatabase() {
+        quotesDAO.deleteAllQuotes()
     }
 
-    // Function to update the quote type in the Room database
-    suspend fun updateQuoteType(id: Long, quoteType: String) {
-        withContext(Dispatchers.IO) {
-            quotesDAO.updateQuoteType(id.toString(), quoteType)
-        }
+    fun updateQuoteTypeInDatabase(key: Long, quoteType: String) {
+        quotesDAO.updateQuoteType(key.toString(), quoteType)
     }
 //================================================================================================
 //    suspend fun fetchAndInsertQuotes() = flow {
