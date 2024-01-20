@@ -1,4 +1,4 @@
-package favoriteFragment
+package com.example.quotes.favoriteFragment
 
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -12,9 +12,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.quotes.R
 import com.example.quotes.databinding.FragmentFavoriteBinding
 import com.example.quotes.ui.adapter.QuotesAdapter
-import pojo.Quotes
-import storage.roomdata.QuotesEntity
-import storage.SharedPreferencesManager
+import com.example.quotes.pojo.Quotes
+import com.example.quotes.storage.roomdata.QuotesEntity
+import com.example.quotes.storage.SharedPreferencesManager
 
 
 class FavoriteFragment : Fragment() {
@@ -39,12 +39,13 @@ class FavoriteFragment : Fragment() {
     //initiate recyclerview
     private fun initRecyclerView() {
 //        val favoriteQuotesList = getFavoriteQuotes()
-        val sharedPreferencesManager = SharedPreferencesManager(requireContext())
-        val favoriteQuotesList = sharedPreferencesManager.getQuotesFromSharedPrefs()
+//        val sharedPreferencesManager = SharedPreferencesManager(requireContext())
+//        val favoriteQuotesList = sharedPreferencesManager.getQuotesFromSharedPrefs()
         // val quotesList = sharedPreferences.all
+
         bindingFv.rvFavorite.apply {
             layoutManager = LinearLayoutManager(requireContext())
-            quotesAdapter = QuotesAdapter(favoriteQuotesList)
+            quotesAdapter = QuotesAdapter(   (listOf <Quotes>()))
             adapter = quotesAdapter
         }
     }

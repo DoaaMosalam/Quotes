@@ -1,4 +1,4 @@
-package mainFrgment
+package com.example.quotes.mainFrgment
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

@@ -1,4 +1,4 @@
-package pojo
+package com.example.quotes.pojo
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
@@ -9,8 +9,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Quotes(
-    @SerializedName("id")
-    var id: String,
+    @SerializedName("_id")
+    var _id: String,
     val author: String,
     val content: String,
     val tags: List<String>,

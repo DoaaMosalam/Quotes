@@ -1,11 +1,11 @@
-package storage.roomdata
+package com.example.quotes.storage.roomdata
 
 
 import androidx.room.TypeConverter
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import pojo.Quotes
+import com.example.quotes.pojo.Quotes
 
 class QuoteTypeConverter {
 //    @TypeConverter

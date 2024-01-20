@@ -1,7 +1,7 @@
-package util
+package com.example.quotes.util
 
-import pojo.QuotesResponse
-import pojo.Quotes
+import com.example.quotes.pojo.QuotesResponse
+import com.example.quotes.pojo.Quotes
 import retrofit2.Response
 import retrofit2.http.GET
 

@@ -1,4 +1,4 @@
-package splach_screen
+package com.example.quotes.splach_screen
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -7,7 +7,7 @@ import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.databinding.DataBindingUtil
 import com.example.quotes.R
 import com.example.quotes.databinding.ActivitySplachScreenBinding
-import ui.MainActivity
+import com.example.quotes.ui.MainActivity
 
 class SplachScreen : AppCompatActivity() {
     private lateinit var bindingscreen:ActivitySplachScreenBinding

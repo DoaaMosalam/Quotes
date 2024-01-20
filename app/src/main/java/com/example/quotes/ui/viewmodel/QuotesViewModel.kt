@@ -9,10 +9,10 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import pojo.Quotes
-import repository.QuotesRepository
-import storage.roomdata.QuotesEntity
-import util.RequestStatus
+import com.example.quotes.pojo.Quotes
+import com.example.quotes.repository.QuotesRepository
+import com.example.quotes.storage.roomdata.QuotesEntity
+import com.example.quotes.util.RequestStatus
 
 class QuotesViewModel(
     private val repository: QuotesRepository
@@ -59,16 +59,6 @@ class QuotesViewModel(
                 repository.getQuoteFromDatabase()
             } else {
                 null
-            }
-        }
-    }
-
-    fun updateQuoteType(key: String, quoteT: String) {
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                repository.updateQuoteType(key, quoteT)
-            }catch (e: Exception){
-                Log.i("updateQuoteType", "updateQuoteType: $e")
             }
         }
     }

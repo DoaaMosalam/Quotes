@@ -1,4 +1,4 @@
-package storage.roomdata
+package com.example.quotes.storage.roomdata
 
 
 import androidx.room.ColumnInfo
@@ -8,7 +8,8 @@ import androidx.room.PrimaryKey
 data class QuotesEntity(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
-    val id: Long,
+    val id: Long?=0,
+    val _id: String,
     val author: String,
     val content: String,
     val tags: List<String>,

@@ -5,7 +5,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.example.quotes.ui.quotesFragment.QuotesFragment
-import favoriteFragment.FavoriteFragment
+import com.example.quotes.favoriteFragment.FavoriteFragment
 
 class MainViewPagerAdapter(fragmentManager: FragmentManager,lifecycle: Lifecycle):FragmentStateAdapter(fragmentManager, lifecycle) {
     val mainList = listOf("Home","Favorite")

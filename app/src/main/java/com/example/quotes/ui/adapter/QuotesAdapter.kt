@@ -6,8 +6,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.quotes.R
 import com.example.quotes.databinding.RecyclerViewItemBinding
-import pojo.Quotes
-import util.ShareQuotes
+import com.example.quotes.pojo.Quotes
+import com.example.quotes.util.ShareQuotes
 
 class QuotesAdapter(private val quotes: List<Quotes>) :
     RecyclerView.Adapter<QuotesAdapter.QuotesViewHolder>(){

@@ -11,7 +11,7 @@
         android:id="@+id/motion_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="splach_screen.SplachScreen"
+        tools:context=".splach_screen.SplachScreen"
         app:layoutDescription="@xml/activity_splach_screen_scene">
         <ImageView
             android:id="@+id/image_motion"

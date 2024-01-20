@@ -9,7 +9,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="favoriteFragment.FavoriteFragment">
+        tools:context=".favoriteFragment.FavoriteFragment">
 
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/ed_search_quotes"

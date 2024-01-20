@@ -1,4 +1,4 @@
-package util
+package com.example.quotes.util
 
 sealed class RequestStatus<out T> {
     object Waiting : RequestStatus<Nothing>()

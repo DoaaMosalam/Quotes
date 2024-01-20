@@ -1,6 +1,6 @@
-package util
+package com.example.quotes.util
 
-import storage.roomdata.QuotesEntity
+import com.example.quotes.storage.roomdata.QuotesEntity
 
 interface OnQuotesListener {
         fun setOnButtonQuotesClickListener(listener: OnQuotesListener)

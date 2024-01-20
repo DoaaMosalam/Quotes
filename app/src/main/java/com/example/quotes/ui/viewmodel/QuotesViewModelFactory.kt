@@ -2,7 +2,7 @@ package com.example.quotes.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import repository.QuotesRepository
+import com.example.quotes.repository.QuotesRepository
 import java.security.InvalidParameterException
 
 class QuotesViewModelFactory(

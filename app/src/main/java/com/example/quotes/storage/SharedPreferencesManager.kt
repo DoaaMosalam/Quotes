@@ -1,10 +1,10 @@
-package storage
+package com.example.quotes.storage
 
 import android.content.Context
 import android.content.SharedPreferences
 import com.google.gson.Gson
-import pojo.Quotes
-import util.Credential
+import com.example.quotes.pojo.Quotes
+import com.example.quotes.util.Credential
 
 class SharedPreferencesManager(mCtx: Context) {
 

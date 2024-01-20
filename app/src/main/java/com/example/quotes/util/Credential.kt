@@ -1,7 +1,7 @@
-package util
+package com.example.quotes.util
 
 import android.content.Context
-import storage.SharedPreferencesManager
+import com.example.quotes.storage.SharedPreferencesManager
 
 object Credential {
      // URL API QUOTES.

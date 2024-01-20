@@ -16,13 +16,13 @@ import com.example.quotes.databinding.FragmentQuotesBinding
 import com.example.quotes.ui.viewmodel.QuotesViewModel
 import com.example.quotes.ui.viewmodel.QuotesViewModelFactory
 import com.google.android.material.snackbar.Snackbar
-import pojo.Quotes
-import repository.QuotesRepository
-import storage.SharedPreferencesManager
-import storage.roomdata.QuotesDatabase
-import storage.roomdata.QuotesEntity
-import util.ApiService
-import util.ShareQuotes
+import com.example.quotes.pojo.Quotes
+import com.example.quotes.repository.QuotesRepository
+import com.example.quotes.storage.SharedPreferencesManager
+import com.example.quotes.storage.roomdata.QuotesDatabase
+import com.example.quotes.storage.roomdata.QuotesEntity
+import com.example.quotes.util.ApiService
+import com.example.quotes.util.ShareQuotes
 
 class QuotesFragment : Fragment(), View.OnClickListener {
     private lateinit var bindingQuotes: FragmentQuotesBinding
@@ -46,6 +46,7 @@ class QuotesFragment : Fragment(), View.OnClickListener {
         //call view model provider factory to get data from api
         //call class MyApplication to get data from api
 //        val myApplication = (requireActivity().application as MyApplication).quotesRepository
+//        val quotesViewModel = ViewModelProvider(this, QuotesViewModelFactory(myApplication))[QuotesViewModel::class.java]
 //        val quotesViewModel = ViewModelProvider(this, QuotesViewModelFactory(myApplication))[QuotesViewModel::class.java]
         //=======================================
         val apiQuotes = ApiService.getService()
@@ -108,7 +109,7 @@ class QuotesFragment : Fragment(), View.OnClickListener {
                         ).show()
                         return
                     }
-                    changeHeartColor()
+                   else {changeHeartColor()}
                 }
 
                 R.id.btn_share -> {
@@ -129,6 +130,7 @@ class QuotesFragment : Fragment(), View.OnClickListener {
             }
         }
     }
+
 
     private fun observeButtonClick() {
         mViewModel.getAllQuotesFromService()

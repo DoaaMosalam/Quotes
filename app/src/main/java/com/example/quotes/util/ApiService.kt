@@ -1,4 +1,4 @@
-package util
+package com.example.quotes.util
 
 import android.app.Application
 import androidx.room.Room
@@ -6,13 +6,13 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import storage.roomdata.QuotesDAO
-import storage.roomdata.QuotesDatabase
+import com.example.quotes.storage.roomdata.QuotesDAO
+import com.example.quotes.storage.roomdata.QuotesDatabase
 import java.util.concurrent.TimeUnit
 
 
 object ApiService {
-    fun getService():ApiQuotes{
+    fun getService(): ApiQuotes {
         // API response interceptor
 
         val builder = Retrofit.Builder()

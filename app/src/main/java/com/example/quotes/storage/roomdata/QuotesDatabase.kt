@@ -1,4 +1,4 @@
-package storage.roomdata
+package com.example.quotes.storage.roomdata
 
 import android.content.Context
 import androidx.room.Database
@@ -12,14 +12,14 @@ abstract class QuotesDatabase : RoomDatabase() {
     abstract fun quotesDatabaseDao(): QuotesDAO
 
     companion object {
-        private val  DATABASE_NAME = "QUOTES_DATABASE"
-        @Volatile
-        private var instance: QuotesDatabase? = null
+        private val DATABASE_NAME = "QUOTES_DATABASE"
+        lateinit var instance: QuotesDatabase
 
         fun getInstance(context: Context): QuotesDatabase {
-            return instance ?: synchronized(this) {
-                instance ?: builderDatabase(context).also { instance = it }
-            }
+            return if (::instance.isInitialized)
+                instance
+            else Room.databaseBuilder(context, QuotesDatabase::class.java, DATABASE_NAME).build()
+
         }
 
         private fun builderDatabase(context: Context): QuotesDatabase {
