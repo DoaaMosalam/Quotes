@@ -6,4 +6,5 @@
     <string name="remove_from_favorite_button">Remove From Favorite</string>
     <string name="quotes_of_the_day">Quotes Of the Day</string>
     <string name="share_quote">Share Quote</string>
+    <string name="favorite">Favorite</string>
 </resources>

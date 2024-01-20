@@ -1,8 +1,9 @@
 package com.example.quotes.ui.quotesFragment
 
-import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,6 +16,7 @@ import com.example.quotes.databinding.FragmentQuotesBinding
 import com.example.quotes.ui.viewmodel.QuotesViewModel
 import com.example.quotes.ui.viewmodel.QuotesViewModelFactory
 import com.google.android.material.snackbar.Snackbar
+import pojo.Quotes
 import repository.QuotesRepository
 import storage.SharedPreferencesManager
 import storage.roomdata.QuotesDatabase
@@ -25,12 +27,13 @@ import util.ShareQuotes
 class QuotesFragment : Fragment(), View.OnClickListener {
     private lateinit var bindingQuotes: FragmentQuotesBinding
     private lateinit var mViewModel: QuotesViewModel
-
     // set initial full heart red color
     private var isHeartFull = false
-
     // set initial background button
     var isWhite = true
+    private var randomQuotes: MutableList<Quotes> = mutableListOf()
+
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -59,36 +62,45 @@ class QuotesFragment : Fragment(), View.OnClickListener {
 //        )[QuotesViewModel::class.java]
 
         //---------------------------------------
-        fetchQuotes()
         setUpObserver()
         //=======================================
-
         return bindingQuotes.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        bindingQuotes.btnQutoes.setOnClickListener(this)
-        bindingQuotes.btnHeart.setOnClickListener(this)
+        bindingQuotes.btnQuotes.setOnClickListener(this)
+        bindingQuotes.btnFavorite.setOnClickListener(this)
         bindingQuotes.btnShare.setOnClickListener(this)
+        //========================================================================================
+        // Add TextWatcher to txtQuotes
+        bindingQuotes.txtQuotes.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
+
+            override fun afterTextChanged(s: Editable) {
+                // Reset heart color when text changes
+                resetHeartColor()
+            }
+        })
 
     }
 
-    private fun fetchQuotes() {
-        mViewModel.fetchQuotes()
+    // Method to reset heart color
+    private fun resetHeartColor() {
+        isHeartFull = false
+        bindingQuotes.btnFavorite.setImageResource(R.drawable.baseline_favorite_border_24)
     }
-
 
     override fun onClick(v: View?) {
         if (v != null) {
             when (v.id) {
-                R.id.btn_Qutoes -> {
-                    changeBackgroundButtonQuotes()
+                R.id.btn_Quotes -> {
                     observeButtonClick()
                 }
-
-                R.id.btn_Heart -> {
-                    if (bindingQuotes.btnQutoes.text.isEmpty()) {
+                R.id.btn_favorite -> {
+                    if (bindingQuotes.txtQuotes.text.isEmpty()) {
                         Snackbar.make(
                             requireView(),
                             "Please click button quotes first",
@@ -99,7 +111,7 @@ class QuotesFragment : Fragment(), View.OnClickListener {
                     changeHeartColor()
                 }
 
-                R.id.btn_Share -> {
+                R.id.btn_share -> {
                     if (bindingQuotes.txtQuotes.text.isEmpty()) {
                         Snackbar.make(
                             requireView(),
@@ -119,12 +131,10 @@ class QuotesFragment : Fragment(), View.OnClickListener {
     }
 
     private fun observeButtonClick() {
-        mViewModel.getAllQuotes()
+        mViewModel.getAllQuotesFromService()
     }
-
-    // implementation when click button quotes to get quotes from api
+   //  implementation when click button quotes to get quotes from api
     private fun setUpObserver() {
-
         mViewModel.isLoad.observe(viewLifecycleOwner)
         { isLoad ->
             if (isLoad) {
@@ -134,7 +144,7 @@ class QuotesFragment : Fragment(), View.OnClickListener {
             }
         }
 
-        //Observe the quotes LiveData to update the UI with new quotes when the quotes are ready
+       // Observe the quotes LiveData to update the UI with new quotes when the quotes are ready
         mViewModel.quotes.observe(viewLifecycleOwner) { quotes ->
             displayRandomQuote(quotes)
         }
@@ -143,10 +153,11 @@ class QuotesFragment : Fragment(), View.OnClickListener {
             // Handle error
             Toast.makeText(requireContext(), "Error: $errorMessage", Toast.LENGTH_SHORT).show()
         }
+
     }
 
     //  get quotes random from api
-    private fun displayRandomQuote(quotes: List<QuotesEntity>) {
+    private fun displayRandomQuote(quotes: List<Quotes>) {
         if (quotes.isNotEmpty()) {
             val shuffledList = quotes.shuffled()
             val randomQuote = shuffledList.last()
@@ -159,31 +170,24 @@ class QuotesFragment : Fragment(), View.OnClickListener {
             }
         }
     }
-
     //Save data in shared preference
     private fun saveData() {
         SharedPreferencesManager(requireActivity().baseContext).saveQuotes(bindingQuotes.txtQuotes.text.toString())
     }
+    // create method to change color button btn_favorite
+    // when click button favorite and return to default color after change txt_quotes
 
-    // change heart color when click button heart to red color and return to white color when click again and save data in shared preference
-    @SuppressLint("UseCompatLoadingForDrawables")
     private fun changeHeartColor() {
         isHeartFull = !isHeartFull
-        // Change heart color or perform other actions here
+        // Change heart color based on isHeartFull
         val heartDrawable = if (isHeartFull) {
-            resources.getDrawable(R.drawable.baseline_read_heart, null)
+            R.drawable.baseline_read_heart
         } else {
-            resources.getDrawable(R.drawable.baseline_favorite_border_24, null)
+            R.drawable.baseline_favorite_border_24
         }
-        bindingQuotes.btnHeart.setCompoundDrawablesWithIntrinsicBounds(
-            null,
-            null,
-            heartDrawable,
-            null
-        )
+        bindingQuotes.btnFavorite.setImageResource(heartDrawable)
         saveData()
     }
-
     //change background button share when click button share
     private fun changeBackgroundButtonShare() {
         isWhite = !isWhite
@@ -191,16 +195,6 @@ class QuotesFragment : Fragment(), View.OnClickListener {
             bindingQuotes.btnShare.setBackgroundColor(Color.WHITE)
         } else {
             bindingQuotes.btnShare.setBackgroundColor(resources.getColor(R.color.backgroundColor))
-        }
-    }
-
-    //change background button quotes when click button quotes
-    private fun changeBackgroundButtonQuotes() {
-        isWhite = !isWhite
-        if (isWhite) {
-            bindingQuotes.btnQutoes.setBackgroundColor(Color.WHITE)
-        } else {
-            bindingQuotes.btnQutoes.setBackgroundColor(resources.getColor(R.color.backgroundColor))
         }
     }
 }

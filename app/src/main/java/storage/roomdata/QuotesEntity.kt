@@ -9,7 +9,6 @@ data class QuotesEntity(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
     val id: Long,
-    val quoteType: String,
     val author: String,
     val content: String,
     val tags: List<String>,

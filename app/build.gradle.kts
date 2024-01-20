@@ -89,7 +89,4 @@ dependencies {
 
     //for Serializable annotation using in type converter
     implementation ("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.1")
-
-
-
 }

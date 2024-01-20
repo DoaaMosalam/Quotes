@@ -32,11 +32,15 @@ class FavoriteFragment : Fragment() {
         initRecyclerView()
         return bindingFv.root
     }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-
+    }
     //initiate recyclerview
     private fun initRecyclerView() {
-        val favoriteQuotesList = getFavoriteQuotes()
+//        val favoriteQuotesList = getFavoriteQuotes()
+        val sharedPreferencesManager = SharedPreferencesManager(requireContext())
+        val favoriteQuotesList = sharedPreferencesManager.getQuotesFromSharedPrefs()
         // val quotesList = sharedPreferences.all
         bindingFv.rvFavorite.apply {
             layoutManager = LinearLayoutManager(requireContext())
@@ -45,11 +49,8 @@ class FavoriteFragment : Fragment() {
         }
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
 
-    }
-
+    //function get data from shared preferences
     private fun getFavoriteQuotes(): List<Quotes> {
         return listOf(
             Quotes(

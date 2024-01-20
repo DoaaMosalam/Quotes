@@ -1,85 +1,77 @@
 package com.example.quotes.ui.viewmodel
 
-import androidx.core.content.ContentProviderCompat.requireContext
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.switchMap
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import pojo.Quotes
 import repository.QuotesRepository
-import storage.roomdata.QuotesDatabase
 import storage.roomdata.QuotesEntity
-import util.ApiService
+import util.RequestStatus
 
 class QuotesViewModel(
     private val repository: QuotesRepository
 ) : ViewModel() {
 
     private val _isLoad = MutableLiveData<Boolean>().apply { value = false }
-    private val _quotes = MutableLiveData<List<QuotesEntity>>()
+    private val _quotes = MutableLiveData<List<Quotes>>()
     private val _error = MutableLiveData<String>()
     val isLoad: LiveData<Boolean> get() = _isLoad
-    val quotes: LiveData<List<QuotesEntity>> get() = _quotes
+    val quotes: LiveData<List<Quotes>> get() = _quotes
     val error: LiveData<String> get() = _error
 
-    // Function to fetch quotes from the API and save them in the Room database
-    fun fetchQuotes() {
+    fun getAllQuotesFromService() {
         viewModelScope.launch {
-            _isLoad.value=true
-            try {
-                repository.fetchQuotes()
-                _isLoad.value=false
-            } catch (e: Exception) {
-                _error.postValue(e.message)
+            repository.getQuotesFromService().collect() { requestStatus ->
+                when (requestStatus) {
+                    is RequestStatus.Success -> {
+                        _quotes.postValue(requestStatus.data.results)
+                        _isLoad.postValue(false)
+                    }
+
+                    is RequestStatus.Error -> {
+                        _error.postValue(requestStatus.message)
+                        _isLoad.postValue(false)
+                    }
+
+                    is RequestStatus.Waiting -> {
+                        _isLoad.postValue(true)
+                    }
+                }
+            }
+        }
+    }
+    //=============================================================================================
+    fun getQuote() {
+        viewModelScope.launch {
+            repository.insertQuotesToData()
+        }
+    }
+
+    fun getQuoteFromDatabase(): LiveData<List<QuotesEntity>> {
+        return _isLoad.switchMap {
+            if (!it) {
+                repository.getQuoteFromDatabase()
+            } else {
+                null
             }
         }
     }
 
-
-    // Function to get all quotes from the Room database
-    fun getAllQuotes():LiveData<List<QuotesEntity>> {
-        return repository.getAllQuotesFromDatabase()
+    fun updateQuoteType(key: String, quoteT: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                repository.updateQuoteType(key, quoteT)
+            }catch (e: Exception){
+                Log.i("updateQuoteType", "updateQuoteType: $e")
+            }
+        }
     }
-
-
-    // Function to search quotes in the Room database
-    fun searchQuotes(search: String): LiveData<List<QuotesEntity>> {
-        return repository.searchQuotesFromDatabase(search)
-    }
-
-    // Function to delete all quotes from the Room database
-    fun deleteAllQuotes() = viewModelScope.launch {
-        repository.deleteAllQuotesFromDatabase()
-    }
-
-    // Function to update quote type in the Room database
-    fun updateQuoteType(key: Long, quoteType: String) {
-        repository.updateQuoteTypeInDatabase(key, quoteType)
-    }
-
-//==================================================================================================
-
-//    fun getQuotesAndInsert() {
-//        viewModelScope.launch {
-//            quotesRepository.fetchAndInsertQuotes().collect() { requestStatus ->
-//                when (requestStatus) {
-//                    is RequestStatus.Success -> {
-//                        _quotes.postValue(requestStatus.data.results)
-//                        _isLoad.postValue(false)
-//                    }
-//                    is RequestStatus.Error -> {
-//                        _error.postValue(requestStatus.message)
-//                        _isLoad.postValue(false)
-//                    }
-//                    is RequestStatus.Waiting -> {
-//                        _isLoad.postValue(true)
-//                    }
-//                }
-//            }
-//        }
-//    }
-
-
 }
 
 

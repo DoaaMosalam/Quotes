@@ -10,7 +10,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class Quotes(
     @SerializedName("id")
-    val id: String,
+    var id: String,
     val author: String,
     val content: String,
     val tags: List<String>,

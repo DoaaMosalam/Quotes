@@ -2,14 +2,16 @@ package repository
 
 import android.util.Log
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.withContext
 import pojo.Quotes
-import storage.roomdata.QuotesDAO
+import pojo.QuotesResponse
+import retrofit2.Response
 import storage.roomdata.QuotesDatabase
 import storage.roomdata.QuotesEntity
 import util.ApiQuotes
+import util.RequestStatus
 
 
 class QuotesRepository(
@@ -19,71 +21,59 @@ class QuotesRepository(
 ) {
     private val quotesDAO = quotesDatabase.quotesDatabaseDao()
 
- //Function to fetch quotes from the API and insert them into the Room database
- suspend fun fetchQuotes() {
-     try {
-         val response = apiQuotes.getQuotes()
-         if (response.isSuccessful) {
-             val quotesResponse = response.body()
-             quotesResponse?.let { saveQuotesToDatabase(it.results) }
-         } else {
-             Log.e("TAG", "getQuoteFromServerToDatabase: ${response.body()}")
-         }
-     } catch (e: Exception) {
-         Log.e("error", "getQuoteFromServerToDatabase: $e")
-     }
- }
+    suspend fun getQuotesFromService() = flow {
+        emit(RequestStatus.Waiting)
+        try {
+            val response: Response<QuotesResponse> = apiQuotes.getQuotes()
 
-    private suspend fun saveQuotesToDatabase(quotes: List<Quotes>) {
-        val quotesEntities = quotes.map {
-            QuotesEntity(
-                0, // Auto-generated ID
-                "REGULAR", // You may set a default quoteType
-                it.author,
-                it.content,
-                it.tags,
-                it.authorSlug,
-                it.length,
-                it.dateAdded,
-                it.dateModified
-            )
+            if (response.isSuccessful) {
+                emit(RequestStatus.Success(response.body()!!))
+            } else {
+                emit(
+                    RequestStatus.Error(
+                        response.errorBody()?.byteStream()?.reader()?.readText()
+                            ?: "Unknown error"
+                    )
+                )
+            }
+        } catch (e: Exception) {
+            emit(RequestStatus.Error(e.message ?: "An error occurred"))
         }
-        quotesDAO.insertQuoteToDatabase(quotesEntities)
     }
 
-    fun getAllQuotesFromDatabase(): LiveData<List<QuotesEntity>> {
+    //=============================================================================================
+    suspend fun insertQuotesToData(){
+        withContext(Dispatchers.IO){
+            try {
+                val response = apiQuotes.getQuotes()
+                if (response.isSuccessful){
+                    val responseDetails = response.body()
+                    responseDetails?.let {
+                        for (quote in responseDetails.results){
+                            val entity = QuotesEntity(
+                                id = quote.id.toLong(),
+                                author = quote.author,
+                                content = quote.content,
+                                tags = quote.tags,
+                                authorSlug = quote.authorSlug,
+                                length = quote.length,
+                                dateAdded = quote.dateAdded,
+                                dateModified = quote.dateModified
+                            )
+                            quotesDAO.insertQuoteToDatabase(entity)
+                        }
+                    }
+                }else{
+                    Log.i("TAG", "insertQuotesToData: ${response.body()}")
+                }
+
+            }catch (e:Exception){
+                Log.i("error", "Error insert Quotes: $e")
+            }
+        }
+    }
+
+    fun getQuoteFromDatabase(): LiveData<List<QuotesEntity>> {
         return quotesDAO.getAllQuotesFromData()
     }
-
-    fun searchQuotesFromDatabase(search: String): LiveData<List<QuotesEntity>> {
-        return quotesDAO.searchQuotes("%$search%")
-    }
-
-    suspend fun deleteAllQuotesFromDatabase() {
-        quotesDAO.deleteAllQuotes()
-    }
-
-    fun updateQuoteTypeInDatabase(key: Long, quoteType: String) {
-        quotesDAO.updateQuoteType(key.toString(), quoteType)
-    }
-//================================================================================================
-//    suspend fun fetchAndInsertQuotes() = flow {
-//        emit(RequestStatus.Waiting)
-//        try {
-//            val response: Response<QuotesResponse> = apiQuotes.getQuotes()
-//
-//            if (response.isSuccessful) {
-//                emit(RequestStatus.Success(response.body()!!))
-//            } else {
-//                emit(
-//                    RequestStatus.Error(
-//                        response.errorBody()?.byteStream()?.reader()?.readText()
-//                            ?: "Unknown error"
-//                    )
-//                )
-//            }
-//        } catch (e: Exception) {
-//            emit(RequestStatus.Error(e.message ?: "An error occurred"))
-//        }
-//    }
 }
