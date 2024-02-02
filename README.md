@@ -15,6 +15,7 @@
         <p><a href="https://futurestud.io/tutorials/java-basics-for-retrofit-callbacks">Corotuines</a></p>
          <p>Data Binding</a></p>
           <p>RoomDatabase</a></p>
+      <p>Shared Preference</a></p>
            <p>Dependency Injection</a></p>
        <hr>
        <h4> some photos from project</h4>
