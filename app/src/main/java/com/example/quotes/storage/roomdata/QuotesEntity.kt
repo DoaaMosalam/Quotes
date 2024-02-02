@@ -19,3 +19,5 @@ data class QuotesEntity(
     val dateModified: String
 )
 
+
+

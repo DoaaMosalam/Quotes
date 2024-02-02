@@ -3,43 +3,68 @@ package com.example.quotes.ui.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.AsyncListDiffer
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.quotes.R
 import com.example.quotes.databinding.RecyclerViewItemBinding
-import com.example.quotes.pojo.Quotes
+import com.example.quotes.storage.roomdata.QuotesEntity
+import com.example.quotes.util.OnQuotesListener
+import com.example.quotes.util.QuotesDiffUtil
 import com.example.quotes.util.ShareQuotes
 
-class QuotesAdapter(private val quotes: List<Quotes>) :
+class QuotesAdapter(private val listener: OnQuotesListener) :
     RecyclerView.Adapter<QuotesAdapter.QuotesViewHolder>(){
+        private lateinit var binding: RecyclerViewItemBinding
 
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
     ): QuotesAdapter.QuotesViewHolder {
-        return QuotesViewHolder(
-            LayoutInflater.from(parent.context).inflate(R.layout.recycler_view_item, parent, false)
-        )
+        binding = RecyclerViewItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return QuotesViewHolder()
     }
 
     override fun onBindViewHolder(holder: QuotesAdapter.QuotesViewHolder, position: Int) {
-        holder.bind(quotes[position])
-    }
+      holder.bind(differ.currentList[position])
 
-    override fun getItemCount(): Int = quotes.size
+    }
+    override fun getItemCount(): Int = differ.currentList.size
 
     // inner class QuotesViewHolder
-    inner class QuotesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val binding = RecyclerViewItemBinding.bind(itemView)
-        fun bind(quotes: Quotes) {
-            binding.textFavQuote.text = quotes.content
-            binding.btnRemoveQuote.setOnClickListener {  }
+    inner class QuotesViewHolder : RecyclerView.ViewHolder(binding.root) {
+        fun bind(item: QuotesEntity) {
+            binding.textFavQuote.text = item.content
+            binding.btnRemoveQuote.setOnClickListener {
+                listener.onRemoveClick(item)
+            }
             binding.btnShareQuoteFV.setOnClickListener {
-                ShareQuotes.shareQuote(quotes.content, itemView.context)
-
+                ShareQuotes.shareQuote(item.content, itemView.context)
             }
         }
     }
 
+    private val differUtil = object :DiffUtil.ItemCallback<QuotesEntity>(){
+        override fun areItemsTheSame(oldItem: QuotesEntity, newItem: QuotesEntity): Boolean {
+            return oldItem.id == newItem.id
+        }
+
+        override fun areContentsTheSame(oldItem: QuotesEntity, newItem: QuotesEntity): Boolean {
+            return oldItem.toString() == newItem.toString()
+        }
+
+    }
+    val differ = AsyncListDiffer(this,differUtil)
+
+//    fun updateQuotes(newQuotes: List<QuotesEntity>) {
+//        val diffResult = DiffUtil.calculateDiff(QuotesDiffUtil(quotesEntity, newQuotes))
+//        quotesEntity = newQuotes
+//        diffResult.dispatchUpdatesTo(this)
+//    }
 }
+
+
+
+
 

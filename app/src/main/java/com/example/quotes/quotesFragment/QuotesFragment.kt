@@ -1,6 +1,5 @@
-package com.example.quotes.ui.quotesFragment
+package com.example.quotes.quotesFragment
 
-import android.graphics.Color
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -13,27 +12,24 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.quotes.R
 import com.example.quotes.databinding.FragmentQuotesBinding
-import com.example.quotes.ui.viewmodel.QuotesViewModel
-import com.example.quotes.ui.viewmodel.QuotesViewModelFactory
-import com.google.android.material.snackbar.Snackbar
 import com.example.quotes.pojo.Quotes
 import com.example.quotes.repository.QuotesRepository
 import com.example.quotes.storage.SharedPreferencesManager
+import com.example.quotes.storage.roomdata.QuotesDAO
 import com.example.quotes.storage.roomdata.QuotesDatabase
 import com.example.quotes.storage.roomdata.QuotesEntity
 import com.example.quotes.util.ApiService
 import com.example.quotes.util.ShareQuotes
+import com.example.quotes.viewmodel.QuotesViewModel
+import com.example.quotes.viewmodel.QuotesViewModelFactory
+import com.google.android.material.snackbar.Snackbar
 
 class QuotesFragment : Fragment(), View.OnClickListener {
     private lateinit var bindingQuotes: FragmentQuotesBinding
     private lateinit var mViewModel: QuotesViewModel
     // set initial full heart red color
     private var isHeartFull = false
-    // set initial background button
-    var isWhite = true
-    private var randomQuotes: MutableList<Quotes> = mutableListOf()
-
-
+    private lateinit var currentQuotes: QuotesEntity
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,27 +38,15 @@ class QuotesFragment : Fragment(), View.OnClickListener {
         // Inflate the layout for this fragment
         bindingQuotes =
             DataBindingUtil.inflate(inflater, R.layout.fragment_quotes, container, false)
-//==================================================================================================
-        //call view model provider factory to get data from api
-        //call class MyApplication to get data from api
-//        val myApplication = (requireActivity().application as MyApplication).quotesRepository
-//        val quotesViewModel = ViewModelProvider(this, QuotesViewModelFactory(myApplication))[QuotesViewModel::class.java]
-//        val quotesViewModel = ViewModelProvider(this, QuotesViewModelFactory(myApplication))[QuotesViewModel::class.java]
         //=======================================
-        val apiQuotes = ApiService.getService()
-        val database = QuotesDatabase.getInstance(requireContext())
-        val quotesRepository = QuotesRepository(apiQuotes, database)
-        val viewModelFactory = QuotesViewModelFactory(quotesRepository)
-        mViewModel = ViewModelProvider(this, viewModelFactory)[QuotesViewModel::class.java]
-        //==========================================================================================
         //call view model provider to get data from api
+        mViewModel = ViewModelProvider(this,QuotesViewModelFactory(QuotesRepository(
+            ApiService.getService(),
+            QuotesDatabase.getInstance(requireContext()).quotesDatabaseDao()
+        )))[QuotesViewModel::class.java]
 
-//        ViewModelProvider(
-//            this,
-//            QuotesViewModelFactory(QuotesRepository(ApiService.getService()))
-//        )[QuotesViewModel::class.java]
-
-        //---------------------------------------
+        //=======================================
+        mViewModel.getAllQuotesFromServiceIntoDatabase()
         setUpObserver()
         //=======================================
         return bindingQuotes.root
@@ -73,6 +57,7 @@ class QuotesFragment : Fragment(), View.OnClickListener {
         bindingQuotes.btnQuotes.setOnClickListener(this)
         bindingQuotes.btnFavorite.setOnClickListener(this)
         bindingQuotes.btnShare.setOnClickListener(this)
+
         //========================================================================================
         // Add TextWatcher to txtQuotes
         bindingQuotes.txtQuotes.addTextChangedListener(object : TextWatcher {
@@ -87,7 +72,6 @@ class QuotesFragment : Fragment(), View.OnClickListener {
         })
 
     }
-
     // Method to reset heart color
     private fun resetHeartColor() {
         isHeartFull = false
@@ -100,8 +84,14 @@ class QuotesFragment : Fragment(), View.OnClickListener {
                 R.id.btn_Quotes -> {
                     observeButtonClick()
                 }
+
                 R.id.btn_favorite -> {
-                    if (bindingQuotes.txtQuotes.text.isEmpty()) {
+                    if (bindingQuotes.txtQuotes.text.isNotEmpty()){
+                        if (this::currentQuotes.isInitialized){
+                            saveFavoriteQuoteToDatabase()
+                            changeHeartColor()
+                        }
+                    }else{
                         Snackbar.make(
                             requireView(),
                             "Please click button quotes first",
@@ -109,7 +99,6 @@ class QuotesFragment : Fragment(), View.OnClickListener {
                         ).show()
                         return
                     }
-                   else {changeHeartColor()}
                 }
 
                 R.id.btn_share -> {
@@ -120,42 +109,40 @@ class QuotesFragment : Fragment(), View.OnClickListener {
                             Snackbar.LENGTH_SHORT
                         ).show()
                         return
-                    }
-                    changeBackgroundButtonShare()
-                    ShareQuotes.shareQuote(
+                    }else {ShareQuotes.shareQuote(
                         bindingQuotes.txtQuotes.text.toString(),
                         requireContext()
-                    )
+                    )}
                 }
             }
         }
     }
-
-
     private fun observeButtonClick() {
-        mViewModel.getAllQuotesFromService()
+        displayRandomQuote(mViewModel.quotes.value ?: emptyList())
     }
    //  implementation when click button quotes to get quotes from api
     private fun setUpObserver() {
+       // Show progress bar when data fetching starts
+       bindingQuotes.progressBar.visibility = View.VISIBLE
         mViewModel.isLoad.observe(viewLifecycleOwner)
         { isLoad ->
-            if (isLoad) {
-                bindingQuotes.progressBar.visibility = View.VISIBLE
-            } else {
-                bindingQuotes.progressBar.visibility = View.GONE
-            }
+            bindingQuotes.progressBar.visibility = if (isLoad) View.VISIBLE else View.GONE
         }
 
        // Observe the quotes LiveData to update the UI with new quotes when the quotes are ready
         mViewModel.quotes.observe(viewLifecycleOwner) { quotes ->
+            // Hide progress bar when data is received
+            bindingQuotes.progressBar.visibility = View.GONE
             displayRandomQuote(quotes)
+
         }
         // Observe the error LiveData to handle any errors
         mViewModel.error.observe(viewLifecycleOwner) { errorMessage ->
+            // Hide progress bar when an error occurs
+            bindingQuotes.progressBar.visibility = View.GONE
             // Handle error
             Toast.makeText(requireContext(), "Error: $errorMessage", Toast.LENGTH_SHORT).show()
         }
-
     }
 
     //  get quotes random from api
@@ -163,6 +150,17 @@ class QuotesFragment : Fragment(), View.OnClickListener {
         if (quotes.isNotEmpty()) {
             val shuffledList = quotes.shuffled()
             val randomQuote = shuffledList.last()
+            // Store the current quote
+            currentQuotes = QuotesEntity(
+                _id = randomQuote._id,
+                author = randomQuote.author,
+                content = randomQuote.content,
+                tags = randomQuote.tags,
+                authorSlug = randomQuote.authorSlug,
+                length = randomQuote.length,
+                dateAdded = randomQuote.dateAdded,
+                dateModified = randomQuote.dateModified
+            )
             // Display the content and author in a custom way
             val formattedQuote = "\"${randomQuote.content}\" \n- ${randomQuote.author}"
             bindingQuotes.txtQuotes.text = formattedQuote
@@ -178,7 +176,6 @@ class QuotesFragment : Fragment(), View.OnClickListener {
     }
     // create method to change color button btn_favorite
     // when click button favorite and return to default color after change txt_quotes
-
     private fun changeHeartColor() {
         isHeartFull = !isHeartFull
         // Change heart color based on isHeartFull
@@ -188,15 +185,35 @@ class QuotesFragment : Fragment(), View.OnClickListener {
             R.drawable.baseline_favorite_border_24
         }
         bindingQuotes.btnFavorite.setImageResource(heartDrawable)
+        // Save data in shared preference
         saveData()
     }
-    //change background button share when click button share
-    private fun changeBackgroundButtonShare() {
-        isWhite = !isWhite
-        if (isWhite) {
-            bindingQuotes.btnShare.setBackgroundColor(Color.WHITE)
+
+    private fun saveFavoriteQuoteToDatabase() {
+        if (this::currentQuotes.isInitialized) {
+            val currentQuote = QuotesEntity(
+                _id = currentQuotes._id,
+                author = currentQuotes.author,
+                content = currentQuotes.content,
+                tags = currentQuotes.tags,
+                authorSlug = currentQuotes.authorSlug,
+                length = currentQuotes.length,
+                dateAdded = currentQuotes.dateAdded,
+                dateModified = currentQuotes.dateModified
+            )
+
+            mViewModel.insertQuotesToDatabase(currentQuote)
+            Snackbar.make(
+                requireView(),
+                "Quote saved successfully",
+                Snackbar.LENGTH_SHORT
+            ).show()
         } else {
-            bindingQuotes.btnShare.setBackgroundColor(resources.getColor(R.color.backgroundColor))
+            Snackbar.make(
+                requireView(),
+                "Please click button quotes first",
+                Snackbar.LENGTH_SHORT
+            ).show()
         }
     }
 }

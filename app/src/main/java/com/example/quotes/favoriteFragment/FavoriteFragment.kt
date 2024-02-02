@@ -1,111 +1,109 @@
 package com.example.quotes.favoriteFragment
 
-import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.core.view.isVisible
+import androidx.core.widget.addTextChangedListener
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.quotes.R
 import com.example.quotes.databinding.FragmentFavoriteBinding
+import com.example.quotes.repository.FavoriteRepository
+import com.example.quotes.storage.roomdata.QuotesDatabase
 import com.example.quotes.ui.adapter.QuotesAdapter
-import com.example.quotes.pojo.Quotes
 import com.example.quotes.storage.roomdata.QuotesEntity
-import com.example.quotes.storage.SharedPreferencesManager
+import com.example.quotes.util.OnQuotesListener
+import com.example.quotes.util.RequestStatus
+import com.example.quotes.viewmodel.FavoriteViewModel
+import com.example.quotes.viewmodel.FavoriteViewModelFactory
 
 
-class FavoriteFragment : Fragment() {
+class FavoriteFragment : Fragment() , OnQuotesListener{
     private lateinit var bindingFv: FragmentFavoriteBinding
     private lateinit var quotesAdapter: QuotesAdapter
-    private lateinit var quotesList: MutableList<QuotesEntity>
-    private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var fViewModel:FavoriteViewModel
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment
         bindingFv = DataBindingUtil.inflate(inflater, R.layout.fragment_favorite, container, false)
-        // init recyclerview
-        initRecyclerView()
+        
         return bindingFv.root
+    } // end onCreateView
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        // call view model provider to get data from database
+        fViewModel = ViewModelProvider(this, FavoriteViewModelFactory(FavoriteRepository
+            (QuotesDatabase.getInstance(requireContext())
+            .quotesDatabaseDao())))[FavoriteViewModel::class.java]
+
+        fViewModel.getAllQuotesFromDatabase()
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        //init RecyclerView
+        initRecyclerView()
+        // Observe changes in the quote list
+        setUpObserverFavoriteQuotes()
 
-    }
+        searchQuotes()
+
+    } // end onViewCreated
+
     //initiate recyclerview
     private fun initRecyclerView() {
-//        val favoriteQuotesList = getFavoriteQuotes()
-//        val sharedPreferencesManager = SharedPreferencesManager(requireContext())
-//        val favoriteQuotesList = sharedPreferencesManager.getQuotesFromSharedPrefs()
-        // val quotesList = sharedPreferences.all
-
         bindingFv.rvFavorite.apply {
             layoutManager = LinearLayoutManager(requireContext())
-            quotesAdapter = QuotesAdapter(   (listOf <Quotes>()))
+            quotesAdapter = QuotesAdapter(this@FavoriteFragment)
+
             adapter = quotesAdapter
         }
     }
 
+    private fun setUpObserverFavoriteQuotes() {
+        bindingFv.progressBar.visibility = View.VISIBLE
 
-    //function get data from shared preferences
-    private fun getFavoriteQuotes(): List<Quotes> {
-        return listOf(
-            Quotes(
-                "1",
-                "Author 1",
-                "Quote 1",
-                listOf("Tag1"),
-                "author_slug_1",
-                30,
-                "date_added",
-                "date_modified"
-            ),
-            Quotes(
-                "2",
-                "Author 2",
-                "Quote 2",
-                listOf("Tag2"),
-                "author_slug_2",
-                40,
-                "date_added",
-                "date_modified"
-            ),
-            Quotes(
-                "1",
-                "Author 1",
-                "Quote 1",
-                listOf("Tag1"),
-                "author_slug_1",
-                30,
-                "date_added",
-                "date_modified"
-            ),
-        )
+        fViewModel.isLoad.observe(viewLifecycleOwner)
+        { isLoad ->
+            bindingFv.progressBar.visibility = if (isLoad) View.VISIBLE else View.GONE
+        }
+        fViewModel.quotesList.observe(viewLifecycleOwner){
+            when(it){
+                is RequestStatus.Success -> {
+                    bindingFv.progressBar.isVisible = false
+                    quotesAdapter.differ.submitList(it.data)
+                }
+                is RequestStatus.Error -> {
+                    bindingFv.progressBar.isVisible = false
+                    Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
+                }
+                is RequestStatus.Waiting -> {
+                    bindingFv.progressBar.isVisible = true
+                }
+            }
+        }
     }
-    //create function get data from shared preferences
-//    private fun getDataFromShared(): List<Quotes> {
-//        val quotesList = sharedPreferences.all
-//        val favoriteQuotesList = mutableListOf<Quotes>()
-//        for (quote in quotesList) {
-//            val quoteObject = Quotes(
-//                quote.key,
-//                quote.value.toString(),
-//                quote.value.toString(),
-//                listOf("Tag1"),
-//                "author_slug_1",
-//                30,
-//                "date_added",
-//                "date_modified"
-//            )
-//            favoriteQuotesList.add(quoteObject)
-//        }
-//        return favoriteQuotesList
-//    }
 
+    override fun onRemoveClick(quotesEntity: QuotesEntity) {
+        fViewModel.deleteSpecialQuoteByID(quotesEntity.id!!)
+        quotesAdapter.notifyDataSetChanged()
+    }
+
+    fun searchQuotes() {
+        bindingFv.edSearchQuotes.addTextChangedListener { editable ->
+            val query = editable.toString().trim()
+            fViewModel.searchQuotes(query)
+        }
+
+    }
 
 
 }

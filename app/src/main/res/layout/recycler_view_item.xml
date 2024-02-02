@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -9,13 +9,13 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="170dp"
+        android:layout_height="190dp"
         android:background="@color/backgroundColor">
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cardView"
             android:layout_width="match_parent"
-            android:layout_height="140dp"
+            android:layout_height="160dp"
             android:layout_margin="@dimen/_15dp"
             android:foregroundGravity="center"
             app:cardCornerRadius="@dimen/_25dp"
@@ -31,40 +31,64 @@
                 android:orientation="vertical"
                 android:padding="8dp">
 
-
-                <TextView
-                    android:id="@+id/text_fav_quote"
+                <ScrollView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_margin="8dp"
-                    android:fontFamily="@font/poppins_medium_italic"
-                    android:gravity="center"
-                    android:padding="5dp"
-                    tools:text="@tools:sample/lorem" />
+                    android:layout_gravity="center">
+
+                    <TextView
+                        android:id="@+id/text_fav_quote"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        android:fontFamily="@font/poppins_medium_italic"
+                        android:gravity="center"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:text="@tools:sample/lorem" />
+
+                    <!--                    <TextView-->
+                    <!--                        android:id="@+id/text_fav_quote"-->
+                    <!--                        android:layout_width="wrap_content"-->
+                    <!--                        android:layout_height="wrap_content"-->
+                    <!--                        android:layout_gravity="center"-->
+                    <!--                        android:layout_margin="8dp"-->
+                    <!--                        android:fontFamily="@font/poppins_medium_italic"-->
+                    <!--                        android:gravity="center"-->
+                    <!--                        tools:text="@tools:sample/lorem"-->
+                    <!--                        app:layout_constraintTop_toTopOf="parent"-->
+                    <!--                        app:layout_constraintStart_toStartOf="parent"-->
+                    <!--                        app:layout_constraintEnd_toEndOf="parent" />-->
+
+
+                </ScrollView>
 
                 <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/text_fav_quote">
 
                     <Button
                         android:id="@+id/btn_remove_quote"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="90dp"
+                        android:layout_height="60dp"
                         android:backgroundTint="@color/white"
                         android:drawableLeft="@drawable/baseline_read_heart"
-                        android:text="@string/remove_from_favorite_button"
                         android:textAllCaps="false"
                         android:textColor="@color/background" />
 
                     <Button
                         android:id="@+id/btn_share_quoteFV"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
                         android:backgroundTint="@color/white"
+                        android:drawableLeft="@drawable/share"
                         android:padding="5dp"
-                        android:drawableLeft="@drawable/baseline_share_24"
                         android:textAllCaps="false"
                         android:textColor="@color/background" />
                 </androidx.appcompat.widget.LinearLayoutCompat>

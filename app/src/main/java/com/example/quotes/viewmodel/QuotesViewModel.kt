@@ -1,18 +1,14 @@
-package com.example.quotes.ui.viewmodel
+package com.example.quotes.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.switchMap
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import com.example.quotes.pojo.Quotes
 import com.example.quotes.repository.QuotesRepository
 import com.example.quotes.storage.roomdata.QuotesEntity
 import com.example.quotes.util.RequestStatus
+import kotlinx.coroutines.launch
 
 class QuotesViewModel(
     private val repository: QuotesRepository
@@ -21,13 +17,15 @@ class QuotesViewModel(
     private val _isLoad = MutableLiveData<Boolean>().apply { value = false }
     private val _quotes = MutableLiveData<List<Quotes>>()
     private val _error = MutableLiveData<String>()
+
     val isLoad: LiveData<Boolean> get() = _isLoad
     val quotes: LiveData<List<Quotes>> get() = _quotes
     val error: LiveData<String> get() = _error
 
-    fun getAllQuotesFromService() {
+//this method get all quotes from API then save them into room database.
+    fun getAllQuotesFromServiceIntoDatabase() {
         viewModelScope.launch {
-            repository.getQuotesFromService().collect() { requestStatus ->
+            repository.getQuotesFromServiceIntoDatabase().collect { requestStatus ->
                 when (requestStatus) {
                     is RequestStatus.Success -> {
                         _quotes.postValue(requestStatus.data.results)
@@ -47,22 +45,14 @@ class QuotesViewModel(
         }
     }
     //=============================================================================================
-    fun getQuote() {
+    //  this method insert quotes to database
+    fun insertQuotesToDatabase(quotes: QuotesEntity) {
         viewModelScope.launch {
-            repository.insertQuotesToData()
-        }
-    }
-
-    fun getQuoteFromDatabase(): LiveData<List<QuotesEntity>> {
-        return _isLoad.switchMap {
-            if (!it) {
-                repository.getQuoteFromDatabase()
-            } else {
-                null
-            }
+            repository.insertQuoteToDatabase(quotes)
         }
     }
 }
+
 
 
 

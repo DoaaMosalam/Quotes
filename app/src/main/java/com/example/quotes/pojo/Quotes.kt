@@ -28,4 +28,3 @@ data class QuotesResponse(
     val lastItemIndex: Int,
     val results: List<Quotes>
 )
-

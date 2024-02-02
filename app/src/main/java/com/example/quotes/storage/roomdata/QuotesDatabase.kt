@@ -13,17 +13,14 @@ abstract class QuotesDatabase : RoomDatabase() {
 
     companion object {
         private val DATABASE_NAME = "QUOTES_DATABASE"
-        lateinit var instance: QuotesDatabase
 
+        @Volatile
+        lateinit var instance: QuotesDatabase
         fun getInstance(context: Context): QuotesDatabase {
             return if (::instance.isInitialized)
                 instance
             else Room.databaseBuilder(context, QuotesDatabase::class.java, DATABASE_NAME).build()
 
-        }
-
-        private fun builderDatabase(context: Context): QuotesDatabase {
-            return Room.databaseBuilder(context, QuotesDatabase::class.java, DATABASE_NAME).build()
         }
     }
 }

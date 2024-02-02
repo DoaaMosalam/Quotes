@@ -13,7 +13,7 @@
     </fragment>
     <fragment
         android:id="@+id/quotesFragment"
-        android:name="com.example.quotes.ui.quotesFragment.QuotesFragment"
+        android:name="com.example.quotes.quotesFragment.QuotesFragment"
         android:label="QuotesFragment"
         tools:layout="@layout/fragment_quotes">
         <action
