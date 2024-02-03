@@ -14,9 +14,9 @@
       <p><a href="https://developer.android.com/jetpack/androidx/releases/recyclerview">-RecyclerView</a></p>
         <p><a href="https://futurestud.io/tutorials/java-basics-for-retrofit-callbacks">Corotuines</a></p>
          <p>Data Binding</a></p>
-          <p>RoomDatabase</a></p>
+          <p><a href="https://developer.android.com/codelabs/android-room-with-a-view-kotlin#0">RoomDatabase</a></p>
       <p>Shared Preference</a></p>
-           <p>Dependency Injection</a></p>
+           <p><a href="https://developer.android.com/jetpack/androidx/releases/room#declaring_dependencies">Dependency Injection</a></p>
        <hr>
        <h4> some photos from project</h4>
       
