@@ -1,9 +1,7 @@
 <resources>
     <string name="app_name">Quotes</string>
-    <string name="click_here_to_view_favorite_quotes">Click Here To View Favorite Quotes</string>
     <string name="generate_another_quote_button">Generate Quote</string>
     <string name="type_something_here_to_search">\tType Something Here To Search..</string>
-    <string name="remove_from_favorite_button">Remove From Favorite</string>
     <string name="quotes_of_the_day">Quotes Of the Day</string>
     <string name="share_quote">Share Quote</string>
     <string name="favorite">Favorite</string>

@@ -15,7 +15,6 @@ import com.example.quotes.databinding.FragmentQuotesBinding
 import com.example.quotes.pojo.Quotes
 import com.example.quotes.repository.QuotesRepository
 import com.example.quotes.storage.SharedPreferencesManager
-import com.example.quotes.storage.roomdata.QuotesDAO
 import com.example.quotes.storage.roomdata.QuotesDatabase
 import com.example.quotes.storage.roomdata.QuotesEntity
 import com.example.quotes.util.ApiService
@@ -27,6 +26,7 @@ import com.google.android.material.snackbar.Snackbar
 class QuotesFragment : Fragment(), View.OnClickListener {
     private lateinit var bindingQuotes: FragmentQuotesBinding
     private lateinit var mViewModel: QuotesViewModel
+
     // set initial full heart red color
     private var isHeartFull = false
     private lateinit var currentQuotes: QuotesEntity
@@ -40,11 +40,14 @@ class QuotesFragment : Fragment(), View.OnClickListener {
             DataBindingUtil.inflate(inflater, R.layout.fragment_quotes, container, false)
         //=======================================
         //call view model provider to get data from api
-        mViewModel = ViewModelProvider(this,QuotesViewModelFactory(QuotesRepository(
-            ApiService.getService(),
-            QuotesDatabase.getInstance(requireContext()).quotesDatabaseDao()
-        )))[QuotesViewModel::class.java]
-
+        mViewModel = ViewModelProvider(
+            this, QuotesViewModelFactory(
+                QuotesRepository(
+                    ApiService.getService(),
+                    QuotesDatabase.getInstance(requireContext()).quotesDatabaseDao()
+                )
+            )
+        )[QuotesViewModel::class.java]
         //=======================================
         mViewModel.getAllQuotesFromServiceIntoDatabase()
         setUpObserver()
@@ -72,6 +75,7 @@ class QuotesFragment : Fragment(), View.OnClickListener {
         })
 
     }
+
     // Method to reset heart color
     private fun resetHeartColor() {
         isHeartFull = false
@@ -86,12 +90,12 @@ class QuotesFragment : Fragment(), View.OnClickListener {
                 }
 
                 R.id.btn_favorite -> {
-                    if (bindingQuotes.txtQuotes.text.isNotEmpty()){
-                        if (this::currentQuotes.isInitialized){
+                    if (bindingQuotes.txtQuotes.text.isNotEmpty()) {
+                        if (this::currentQuotes.isInitialized) {
                             saveFavoriteQuoteToDatabase()
                             changeHeartColor()
                         }
-                    }else{
+                    } else {
                         Snackbar.make(
                             requireView(),
                             "Please click button quotes first",
@@ -102,34 +106,29 @@ class QuotesFragment : Fragment(), View.OnClickListener {
                 }
 
                 R.id.btn_share -> {
-                    if (bindingQuotes.txtQuotes.text.isEmpty()) {
-                        Snackbar.make(
-                            requireView(),
-                            "Please click button quotes first",
-                            Snackbar.LENGTH_SHORT
-                        ).show()
-                        return
-                    }else {ShareQuotes.shareQuote(
+                    ShareQuotes.shareQuote(
                         bindingQuotes.txtQuotes.text.toString(),
                         requireContext()
-                    )}
+                    )
                 }
             }
         }
     }
+
     private fun observeButtonClick() {
         displayRandomQuote(mViewModel.quotes.value ?: emptyList())
     }
-   //  implementation when click button quotes to get quotes from api
+
+    //  implementation when click button quotes to get quotes from api
     private fun setUpObserver() {
-       // Show progress bar when data fetching starts
-       bindingQuotes.progressBar.visibility = View.VISIBLE
+        // Show progress bar when data fetching starts
+        bindingQuotes.progressBar.visibility = View.VISIBLE
         mViewModel.isLoad.observe(viewLifecycleOwner)
         { isLoad ->
             bindingQuotes.progressBar.visibility = if (isLoad) View.VISIBLE else View.GONE
         }
 
-       // Observe the quotes LiveData to update the UI with new quotes when the quotes are ready
+        // Observe the quotes LiveData to update the UI with new quotes when the quotes are ready
         mViewModel.quotes.observe(viewLifecycleOwner) { quotes ->
             // Hide progress bar when data is received
             bindingQuotes.progressBar.visibility = View.GONE
@@ -170,11 +169,12 @@ class QuotesFragment : Fragment(), View.OnClickListener {
             }
         }
     }
+
     //Save data in shared preference
     private fun saveData() {
         SharedPreferencesManager(requireActivity().baseContext).saveQuotes(bindingQuotes.txtQuotes.text.toString())
     }
-    // create method to change color button btn_favorite
+
     // when click button favorite and return to default color after change txt_quotes
     private fun changeHeartColor() {
         isHeartFull = !isHeartFull
@@ -193,6 +193,7 @@ class QuotesFragment : Fragment(), View.OnClickListener {
         if (this::currentQuotes.isInitialized) {
             val currentQuote = QuotesEntity(
                 _id = currentQuotes._id,
+                id = currentQuotes.id,
                 author = currentQuotes.author,
                 content = currentQuotes.content,
                 tags = currentQuotes.tags,
@@ -206,12 +207,6 @@ class QuotesFragment : Fragment(), View.OnClickListener {
             Snackbar.make(
                 requireView(),
                 "Quote saved successfully",
-                Snackbar.LENGTH_SHORT
-            ).show()
-        } else {
-            Snackbar.make(
-                requireView(),
-                "Please click button quotes first",
                 Snackbar.LENGTH_SHORT
             ).show()
         }

@@ -1,23 +1,18 @@
 package com.example.quotes.ui.adapter
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.example.quotes.R
 import com.example.quotes.databinding.RecyclerViewItemBinding
 import com.example.quotes.storage.roomdata.QuotesEntity
 import com.example.quotes.util.OnQuotesListener
-import com.example.quotes.util.QuotesDiffUtil
 import com.example.quotes.util.ShareQuotes
 
 class QuotesAdapter(private val listener: OnQuotesListener) :
     RecyclerView.Adapter<QuotesAdapter.QuotesViewHolder>(){
         private lateinit var binding: RecyclerViewItemBinding
-
-
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
@@ -31,6 +26,7 @@ class QuotesAdapter(private val listener: OnQuotesListener) :
 
     }
     override fun getItemCount(): Int = differ.currentList.size
+
 
     // inner class QuotesViewHolder
     inner class QuotesViewHolder : RecyclerView.ViewHolder(binding.root) {
@@ -56,12 +52,6 @@ class QuotesAdapter(private val listener: OnQuotesListener) :
 
     }
     val differ = AsyncListDiffer(this,differUtil)
-
-//    fun updateQuotes(newQuotes: List<QuotesEntity>) {
-//        val diffResult = DiffUtil.calculateDiff(QuotesDiffUtil(quotesEntity, newQuotes))
-//        quotesEntity = newQuotes
-//        diffResult.dispatchUpdatesTo(this)
-//    }
 }
 
 

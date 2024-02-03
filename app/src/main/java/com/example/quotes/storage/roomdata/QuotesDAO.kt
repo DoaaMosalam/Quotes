@@ -1,6 +1,5 @@
 package com.example.quotes.storage.roomdata
 
-import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy

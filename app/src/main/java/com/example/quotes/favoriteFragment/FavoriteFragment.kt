@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.databinding.DataBindingUtil
@@ -21,6 +22,8 @@ import com.example.quotes.util.OnQuotesListener
 import com.example.quotes.util.RequestStatus
 import com.example.quotes.viewmodel.FavoriteViewModel
 import com.example.quotes.viewmodel.FavoriteViewModelFactory
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.observeOn
 
 
 class FavoriteFragment : Fragment() , OnQuotesListener{
@@ -43,7 +46,7 @@ class FavoriteFragment : Fragment() , OnQuotesListener{
         fViewModel = ViewModelProvider(this, FavoriteViewModelFactory(FavoriteRepository
             (QuotesDatabase.getInstance(requireContext())
             .quotesDatabaseDao())))[FavoriteViewModel::class.java]
-
+        // call function to get all quotes from database
         fViewModel.getAllQuotesFromDatabase()
     }
 
@@ -53,9 +56,8 @@ class FavoriteFragment : Fragment() , OnQuotesListener{
         initRecyclerView()
         // Observe changes in the quote list
         setUpObserverFavoriteQuotes()
-
-        searchQuotes()
-
+        // call function to search quotes
+        searchEditText()
     } // end onViewCreated
 
     //initiate recyclerview
@@ -63,7 +65,6 @@ class FavoriteFragment : Fragment() , OnQuotesListener{
         bindingFv.rvFavorite.apply {
             layoutManager = LinearLayoutManager(requireContext())
             quotesAdapter = QuotesAdapter(this@FavoriteFragment)
-
             adapter = quotesAdapter
         }
     }
@@ -91,19 +92,23 @@ class FavoriteFragment : Fragment() , OnQuotesListener{
             }
         }
     }
-
+// function to delete a quote from the database
     override fun onRemoveClick(quotesEntity: QuotesEntity) {
         fViewModel.deleteSpecialQuoteByID(quotesEntity.id!!)
         quotesAdapter.notifyDataSetChanged()
     }
-
-    fun searchQuotes() {
-        bindingFv.edSearchQuotes.addTextChangedListener { editable ->
-            val query = editable.toString().trim()
-            fViewModel.searchQuotes(query)
-        }
-
+    private fun searchEditText() {
+       bindingFv.edSearchQuotes.addTextChangedListener{text->
+           searchQuotes(text.toString())
+       }
     }
 
+    private fun searchQuotes(query: String) {
+        val searchQuery = "%$query%"
+        fViewModel.searchQuotes(searchQuery).observe(viewLifecycleOwner) { quotes ->
+            quotesAdapter.differ.submitList(quotes)
+        }
+    }
 
-}
+} // end class FavoriteFragment
+

@@ -14,7 +14,6 @@ import java.util.concurrent.TimeUnit
 object ApiService {
     fun getService(): ApiQuotes {
         // API response interceptor
-
         val builder = Retrofit.Builder()
             .baseUrl(Credential.BASE_URL)
             .client(okHttpClient())
@@ -27,9 +26,9 @@ object ApiService {
         // Client
         val client = OkHttpClient.Builder().addInterceptor(loggingInterceptor)
             .hostnameVerifier { _, _ -> true }
-            .connectTimeout(60, TimeUnit.SECONDS)
-            .writeTimeout(60, TimeUnit.SECONDS)
-            .readTimeout(60, TimeUnit.SECONDS)
+            .connectTimeout(16, TimeUnit.SECONDS)
+            .writeTimeout(16, TimeUnit.SECONDS)
+            .readTimeout(16, TimeUnit.SECONDS)
         client.addInterceptor(loggingInterceptor)
         return client.build()
 
