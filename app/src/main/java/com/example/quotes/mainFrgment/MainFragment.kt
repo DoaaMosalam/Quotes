@@ -5,6 +5,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.constraintlayout.motion.widget.MotionLayout
+import androidx.constraintlayout.motion.widget.MotionScene
 import androidx.databinding.DataBindingUtil
 import androidx.viewpager2.widget.ViewPager2
 import com.example.quotes.R
@@ -53,7 +55,9 @@ class MainFragment : Fragment() {
                 }
             })
         }
-        return mainBinding.root
 
+        //======================================================================================
+        return mainBinding.root
     }
+
 }

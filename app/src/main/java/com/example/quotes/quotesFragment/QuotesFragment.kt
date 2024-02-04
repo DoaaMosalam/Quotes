@@ -73,7 +73,6 @@ class QuotesFragment : Fragment(), View.OnClickListener {
                 resetHeartColor()
             }
         })
-
     }
 
     // Method to reset heart color
@@ -81,7 +80,6 @@ class QuotesFragment : Fragment(), View.OnClickListener {
         isHeartFull = false
         bindingQuotes.btnFavorite.setImageResource(R.drawable.baseline_favorite_border_24)
     }
-
     override fun onClick(v: View?) {
         if (v != null) {
             when (v.id) {

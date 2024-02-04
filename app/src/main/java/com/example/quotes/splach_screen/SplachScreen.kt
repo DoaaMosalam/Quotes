@@ -13,7 +13,6 @@ class SplachScreen : AppCompatActivity() {
     private lateinit var bindingscreen:ActivitySplachScreenBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_splach_screen)
         bindingscreen = DataBindingUtil.setContentView(this,R.layout.activity_splach_screen)
         bindingscreen.motionLayout.addTransitionListener(object : MotionLayout.TransitionListener {
             override fun onTransitionStarted(

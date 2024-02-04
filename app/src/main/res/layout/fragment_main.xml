@@ -5,13 +5,15 @@
     <data>
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.constraintlayout.motion.widget.MotionLayout
+        android:id="@+id/main_motion_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        app:layoutDescription="@xml/fragment_main_xml_main_motion_layout_scene"
         tools:context=".mainFrgment.MainFragment">
 
-
         <TextView
+            android:id="@+id/quotes_of_the_day"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
@@ -29,6 +31,7 @@
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tab_layout"
+            style="@style/CustomTabText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_15dp"
@@ -38,16 +41,14 @@
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:tabGravity="fill"
             app:tabIndicator="@drawable/tab_indicator"
             app:tabIndicatorAnimationMode="elastic"
             app:tabIndicatorColor="@null"
             app:tabIndicatorGravity="stretch"
             app:tabMode="fixed"
-            app:tabGravity="fill"
-            app:tabUnboundedRipple="false"
             app:tabSelectedTextColor="@color/white"
-            style="@style/CustomTabText"/>
-
+            app:tabUnboundedRipple="false" />
 
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/view_pager2"
@@ -59,5 +60,5 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tab_layout" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.motion.widget.MotionLayout>
 </layout>
