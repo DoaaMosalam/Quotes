@@ -18,7 +18,11 @@
       <p>Shared Preference</a></p>
            <p><a href="https://developer.android.com/jetpack/androidx/releases/room#declaring_dependencies">Dependency Injection</a></p>
        <hr>
-       <h4> some photos from project</h4>
+       <h4>Video App </h4>
       
+
+https://github.com/DoaaMosalam/Quotes/assets/40686512/d6b21481-22e0-4a48-b138-81a410dc71aa
+
+
 <head/>
   <html/>
