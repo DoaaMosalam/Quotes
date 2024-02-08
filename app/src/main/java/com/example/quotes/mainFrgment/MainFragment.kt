@@ -15,7 +15,9 @@ import com.example.quotes.databinding.FragmentMainBinding
 import com.example.quotes.ui.adapter.MainViewPagerAdapter
 import com.google.android.material.tabs.TabLayout
 import androidx.navigation.fragment.findNavController
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainFragment : Fragment() {
     private lateinit var mainBinding: FragmentMainBinding
     private lateinit var adapter: MainViewPagerAdapter

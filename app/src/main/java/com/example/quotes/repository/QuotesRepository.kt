@@ -13,9 +13,10 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.withContext
 import retrofit2.Response
+import javax.inject.Inject
 
 
-class QuotesRepository(
+class QuotesRepository @Inject constructor(
     private val apiQuotes: ApiQuotes,
     private val quotesDAO: QuotesDAO
 ) {

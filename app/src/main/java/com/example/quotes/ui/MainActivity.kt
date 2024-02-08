@@ -12,7 +12,9 @@ import com.example.quotes.R
 import com.example.quotes.databinding.ActivityMainBinding
 import com.example.quotes.ui.adapter.MainViewPagerAdapter
 import com.google.android.material.tabs.TabLayout
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var mNavController: NavController

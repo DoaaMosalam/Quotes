@@ -6,6 +6,7 @@ plugins {
     id("androidx.navigation.safeargs.kotlin")
     //dagger hilt
     id("com.google.dagger.hilt.android")
+    id("dagger.hilt.android.plugin")
 
 }
 
@@ -88,6 +89,8 @@ dependencies {
     // Dagger Hilt dependencies
     implementation("com.google.dagger:hilt-android:2.50")
     kapt("com.google.dagger:hilt-android-compiler:2.50")
+    kapt("androidx.hilt:hilt-compiler:1.1.0")
+    implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
 
     //for Serializable annotation using in type converter
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.2")

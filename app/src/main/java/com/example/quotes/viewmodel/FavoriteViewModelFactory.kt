@@ -3,10 +3,10 @@ package com.example.quotes.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.quotes.repository.FavoriteRepository
-import com.example.quotes.repository.QuotesRepository
 import java.security.InvalidParameterException
 
-class FavoriteViewModelFactory(
+
+class FavoriteViewModelFactory (
     private val favoriteRepository:FavoriteRepository): ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {

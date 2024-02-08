@@ -3,9 +3,10 @@ package com.example.quotes.repository
 import com.example.quotes.storage.roomdata.QuotesDAO
 import com.example.quotes.storage.roomdata.QuotesEntity
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
 
-class FavoriteRepository(
+class FavoriteRepository @Inject constructor(
     private val quotesDAO: QuotesDAO
 ) {
     // Function to get all quotes from the database

@@ -22,7 +22,9 @@ import com.example.quotes.util.ShareQuotes
 import com.example.quotes.viewmodel.QuotesViewModel
 import com.example.quotes.viewmodel.QuotesViewModelFactory
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class QuotesFragment : Fragment(), View.OnClickListener {
     private lateinit var bindingQuotes: FragmentQuotesBinding
     private lateinit var mViewModel: QuotesViewModel

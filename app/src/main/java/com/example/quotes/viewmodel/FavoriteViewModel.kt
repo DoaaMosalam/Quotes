@@ -8,10 +8,13 @@ import androidx.lifecycle.viewModelScope
 import com.example.quotes.repository.FavoriteRepository
 import com.example.quotes.storage.roomdata.QuotesEntity
 import com.example.quotes.util.RequestStatus
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class FavoriteViewModel
+@HiltViewModel
+class FavoriteViewModel @Inject constructor
     (
     private val repository: FavoriteRepository
 ) : ViewModel() {
