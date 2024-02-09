@@ -1,7 +1,6 @@
 package com.example.quotes.favoriteFragment
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,29 +8,30 @@ import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.quotes.R
 import com.example.quotes.databinding.FragmentFavoriteBinding
-import com.example.quotes.ui.adapter.QuotesAdapter
 import com.example.quotes.storage.roomdata.QuotesEntity
+import com.example.quotes.ui.adapter.QuotesAdapter
 import com.example.quotes.util.OnQuotesListener
 import com.example.quotes.util.RequestStatus
 import com.example.quotes.viewmodel.FavoriteViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class FavoriteFragment : Fragment() , OnQuotesListener{
+class FavoriteFragment : Fragment(), OnQuotesListener {
     private lateinit var bindingFv: FragmentFavoriteBinding
     private lateinit var quotesAdapter: QuotesAdapter
-    private val fViewModel:FavoriteViewModel by viewModels()
+    private val fViewModel: FavoriteViewModel by viewModels()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment
         bindingFv = DataBindingUtil.inflate(inflater, R.layout.fragment_favorite, container, false)
-        
+
         return bindingFv.root
     } // end onCreateView
 
@@ -67,31 +67,35 @@ class FavoriteFragment : Fragment() , OnQuotesListener{
         { isLoad ->
             bindingFv.progressBar.visibility = if (isLoad) View.VISIBLE else View.GONE
         }
-        fViewModel.quotesList.observe(viewLifecycleOwner){
-            when(it){
+        fViewModel.quotesList.observe(viewLifecycleOwner) {
+            when (it) {
                 is RequestStatus.Success -> {
                     bindingFv.progressBar.isVisible = false
                     quotesAdapter.differ.submitList(it.data)
                 }
+
                 is RequestStatus.Error -> {
                     bindingFv.progressBar.isVisible = false
                     Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
                 }
+
                 is RequestStatus.Waiting -> {
                     bindingFv.progressBar.isVisible = true
                 }
             }
         }
     }
-// function to delete a quote from the database
+
+    // function to delete a quote from the database
     override fun onRemoveClick(quotesEntity: QuotesEntity) {
         fViewModel.deleteSpecialQuoteByID(quotesEntity.id!!)
         quotesAdapter.notifyDataSetChanged()
     }
+
     private fun searchEditText() {
-       bindingFv.edSearchQuotes.addTextChangedListener{text->
-           searchQuotes(text.toString())
-       }
+        bindingFv.edSearchQuotes.addTextChangedListener { text ->
+            searchQuotes(text.toString())
+        }
     }
 
     private fun searchQuotes(query: String) {

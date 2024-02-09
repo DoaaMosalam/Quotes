@@ -1,31 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<MotionScene 
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:motion="http://schemas.android.com/apk/res-auto">
 
     <Transition
         motion:constraintSetEnd="@+id/end"
         motion:constraintSetStart="@id/start"
         motion:duration="1000">
-       <KeyFrameSet>
-           <KeyAttribute
-               motion:motionTarget="@+id/quotes_of_the_day"
-               motion:framePosition="10"
-               android:elevation="3dp" />
-           <KeyAttribute
-               motion:motionTarget="@+id/view_pager2"
-               motion:framePosition="90"
-               android:elevation="3dp" />
-           <KeyPosition
-               motion:motionTarget="@+id/tab_layout"
-               motion:framePosition="50"
-               motion:keyPositionType="deltaRelative"
-               motion:percentX="0.5"
-               motion:percentY="0.5" />
-       </KeyFrameSet>
+        <KeyFrameSet>
+            <KeyAttribute
+                motion:motionTarget="@+id/quotes_of_the_day"
+                motion:framePosition="10"
+                android:elevation="3dp" />
+            <KeyAttribute
+                motion:motionTarget="@+id/view_pager2"
+                motion:framePosition="90"
+                android:elevation="3dp" />
+            <KeyPosition
+                motion:motionTarget="@+id/tab_layout"
+                motion:framePosition="50"
+                motion:keyPositionType="deltaRelative"
+                motion:percentX="0.5"
+                motion:percentY="0.5" />
+        </KeyFrameSet>
     </Transition>
 
-    <ConstraintSet android:id="@+id/start"
+    <ConstraintSet
+        android:id="@+id/start"
         android:alpha="0">
         <Constraint
             android:id="@+id/quotes_of_the_day"

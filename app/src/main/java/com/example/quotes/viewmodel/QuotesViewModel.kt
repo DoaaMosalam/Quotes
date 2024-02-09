@@ -11,8 +11,9 @@ import com.example.quotes.util.RequestStatus
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+
 @HiltViewModel
-class QuotesViewModel @Inject constructor (
+class QuotesViewModel @Inject constructor(
     private val repository: QuotesRepository
 ) : ViewModel() {
 
@@ -24,7 +25,7 @@ class QuotesViewModel @Inject constructor (
     val quotes: LiveData<List<Quotes>> get() = _quotes
     val error: LiveData<String> get() = _error
 
-//this method get all quotes from API then save them into room database.
+    //this method get all quotes from API then save them into room database.
     fun getAllQuotesFromServiceIntoDatabase() {
         viewModelScope.launch {
             repository.getQuotesFromServiceIntoDatabase().collect { requestStatus ->
@@ -46,6 +47,7 @@ class QuotesViewModel @Inject constructor (
             }
         }
     }
+
     //=============================================================================================
     //  this method insert quotes to database
     fun insertQuotesToDatabase(quotes: QuotesEntity) {

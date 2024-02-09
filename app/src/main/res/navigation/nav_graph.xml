@@ -9,8 +9,7 @@
         android:id="@+id/mainFragment"
         android:name="com.example.quotes.mainFrgment.MainFragment"
         android:label="MainFragment"
-        tools:layout="@layout/fragment_main">
-    </fragment>
+        tools:layout="@layout/fragment_main"></fragment>
     <fragment
         android:id="@+id/quotesFragment"
         android:name="com.example.quotes.quotesFragment.QuotesFragment"

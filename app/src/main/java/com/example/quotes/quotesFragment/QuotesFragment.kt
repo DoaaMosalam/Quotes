@@ -23,7 +23,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class QuotesFragment : Fragment(), View.OnClickListener {
     private lateinit var bindingQuotes: FragmentQuotesBinding
-    private  val mViewModel: QuotesViewModel by viewModels()
+    private val mViewModel: QuotesViewModel by viewModels()
 
     // set initial full heart red color
     private var isHeartFull = false
@@ -71,6 +71,7 @@ class QuotesFragment : Fragment(), View.OnClickListener {
         isHeartFull = false
         bindingQuotes.btnFavorite.setImageResource(R.drawable.baseline_favorite_border_24)
     }
+
     override fun onClick(v: View?) {
         if (v != null) {
             when (v.id) {

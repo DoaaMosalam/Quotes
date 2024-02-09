@@ -11,20 +11,22 @@ import com.example.quotes.util.OnQuotesListener
 import com.example.quotes.util.ShareQuotes
 
 class QuotesAdapter(private val listener: OnQuotesListener) :
-    RecyclerView.Adapter<QuotesAdapter.QuotesViewHolder>(){
-        private lateinit var binding: RecyclerViewItemBinding
+    RecyclerView.Adapter<QuotesAdapter.QuotesViewHolder>() {
+    private lateinit var binding: RecyclerViewItemBinding
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
     ): QuotesAdapter.QuotesViewHolder {
-        binding = RecyclerViewItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        binding =
+            RecyclerViewItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return QuotesViewHolder()
     }
 
     override fun onBindViewHolder(holder: QuotesAdapter.QuotesViewHolder, position: Int) {
-      holder.bind(differ.currentList[position])
+        holder.bind(differ.currentList[position])
 
     }
+
     override fun getItemCount(): Int = differ.currentList.size
 
 
@@ -41,7 +43,7 @@ class QuotesAdapter(private val listener: OnQuotesListener) :
         }
     }
 
-    private val differUtil = object :DiffUtil.ItemCallback<QuotesEntity>(){
+    private val differUtil = object : DiffUtil.ItemCallback<QuotesEntity>() {
         override fun areItemsTheSame(oldItem: QuotesEntity, newItem: QuotesEntity): Boolean {
             return oldItem.id == newItem.id
         }
@@ -51,7 +53,7 @@ class QuotesAdapter(private val listener: OnQuotesListener) :
         }
 
     }
-    val differ = AsyncListDiffer(this,differUtil)
+    val differ = AsyncListDiffer(this, differUtil)
 }
 
 

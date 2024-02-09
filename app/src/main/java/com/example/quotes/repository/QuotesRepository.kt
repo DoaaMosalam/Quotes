@@ -1,17 +1,11 @@
 package com.example.quotes.repository
 
-import android.util.Log
-import androidx.lifecycle.LiveData
 import com.example.quotes.pojo.QuotesResponse
 import com.example.quotes.storage.roomdata.QuotesDAO
-import com.example.quotes.storage.roomdata.QuotesDatabase
 import com.example.quotes.storage.roomdata.QuotesEntity
 import com.example.quotes.util.ApiQuotes
 import com.example.quotes.util.RequestStatus
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.withContext
 import retrofit2.Response
 import javax.inject.Inject
 
@@ -38,7 +32,9 @@ class QuotesRepository @Inject constructor(
             emit(RequestStatus.Error(e.message ?: "An error occurred"))
         }
     }
+
     //=============================================================================================
     //insert quotes into database
-    suspend fun insertQuoteToDatabase(quotes: QuotesEntity) = quotesDAO.insertQuoteToDatabase(quotes)
+    suspend fun insertQuoteToDatabase(quotes: QuotesEntity) =
+        quotesDAO.insertQuoteToDatabase(quotes)
 }

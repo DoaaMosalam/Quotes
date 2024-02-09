@@ -1,10 +1,7 @@
 package com.example.quotes.util
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
-import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.startActivity
 
 object ShareQuotes {
     // share quotes when click button share
