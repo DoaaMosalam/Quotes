@@ -19,34 +19,4 @@ class SharedPreferencesManager(mCtx: Context) {
         }
         editor.apply()
     }
-    // get all quotes from shared preferences
-    fun getQuotesFromSharedPrefs(): List<Quotes> {
-        val quotesList = mutableListOf<Quotes>()
-        val allQuotes = sharedPreferences.all
-        for (quote in allQuotes) {
-            val quoteObject = Gson().fromJson(quote.value.toString(), Quotes::class.java)
-            quotesList.add(quoteObject)
-        }
-        return quotesList
-    }
-
-//    fun getQuotes(): List<Quotes> {
-//        val quotesList = mutableListOf<Quotes>()
-//        val allQuotes = sharedPreferences.all
-//        for (quote in allQuotes) {
-//            val gson = Gson()
-//            val json = quote.value.toString()
-//            val type = object : com.google.gson.reflect.TypeToken<Quotes>() {}.type
-//            val quotes: Quotes = gson.fromJson(json, type)
-//            quotesList.add(quotes)
-//        }
-//        return quotesList
-//    }
-
-    fun removeQuote(quote: String) {
-        val editor = sharedPreferences.edit()
-        editor.remove(quote)
-        editor.apply()
-
-    }
 }

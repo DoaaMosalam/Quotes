@@ -11,16 +11,4 @@ import androidx.room.TypeConverters
 abstract class QuotesDatabase : RoomDatabase() {
     abstract fun quotesDatabaseDao(): QuotesDAO
 
-    companion object {
-        private val DATABASE_NAME = "QUOTES_DATABASE"
-
-        @Volatile
-        lateinit var instance: QuotesDatabase
-        fun getInstance(context: Context): QuotesDatabase {
-            return if (::instance.isInitialized)
-                instance
-            else Room.databaseBuilder(context, QuotesDatabase::class.java, DATABASE_NAME).build()
-
-        }
-    }
 }

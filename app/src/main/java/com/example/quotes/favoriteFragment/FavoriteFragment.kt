@@ -6,31 +6,25 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.quotes.R
 import com.example.quotes.databinding.FragmentFavoriteBinding
-import com.example.quotes.repository.FavoriteRepository
-import com.example.quotes.storage.roomdata.QuotesDatabase
 import com.example.quotes.ui.adapter.QuotesAdapter
 import com.example.quotes.storage.roomdata.QuotesEntity
 import com.example.quotes.util.OnQuotesListener
 import com.example.quotes.util.RequestStatus
 import com.example.quotes.viewmodel.FavoriteViewModel
-import com.example.quotes.viewmodel.FavoriteViewModelFactory
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.observeOn
 
 @AndroidEntryPoint
 class FavoriteFragment : Fragment() , OnQuotesListener{
     private lateinit var bindingFv: FragmentFavoriteBinding
     private lateinit var quotesAdapter: QuotesAdapter
-    private lateinit var fViewModel:FavoriteViewModel
+    private val fViewModel:FavoriteViewModel by viewModels()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -43,10 +37,6 @@ class FavoriteFragment : Fragment() , OnQuotesListener{
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        fViewModel = ViewModelProvider(this, FavoriteViewModelFactory(FavoriteRepository
-            (QuotesDatabase.getInstance(requireContext())
-            .quotesDatabaseDao())))[FavoriteViewModel::class.java]
-
 //        // call function to get all quotes from database
         fViewModel.getAllQuotesFromDatabase()
     }

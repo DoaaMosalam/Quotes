@@ -9,25 +9,21 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import com.example.quotes.R
 import com.example.quotes.databinding.FragmentQuotesBinding
 import com.example.quotes.pojo.Quotes
-import com.example.quotes.repository.QuotesRepository
 import com.example.quotes.storage.SharedPreferencesManager
-import com.example.quotes.storage.roomdata.QuotesDatabase
 import com.example.quotes.storage.roomdata.QuotesEntity
-import com.example.quotes.util.ApiService
 import com.example.quotes.util.ShareQuotes
 import com.example.quotes.viewmodel.QuotesViewModel
-import com.example.quotes.viewmodel.QuotesViewModelFactory
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class QuotesFragment : Fragment(), View.OnClickListener {
     private lateinit var bindingQuotes: FragmentQuotesBinding
-    private lateinit var mViewModel: QuotesViewModel
+    private  val mViewModel: QuotesViewModel by viewModels()
 
     // set initial full heart red color
     private var isHeartFull = false
@@ -42,14 +38,7 @@ class QuotesFragment : Fragment(), View.OnClickListener {
             DataBindingUtil.inflate(inflater, R.layout.fragment_quotes, container, false)
         //=======================================
         //call view model provider to get data from api
-        mViewModel = ViewModelProvider(
-            this, QuotesViewModelFactory(
-                QuotesRepository(
-                    ApiService.getService(),
-                    QuotesDatabase.getInstance(requireContext()).quotesDatabaseDao()
-                )
-            )
-        )[QuotesViewModel::class.java]
+
         //=======================================
         mViewModel.getAllQuotesFromServiceIntoDatabase()
         setUpObserver()

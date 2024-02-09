@@ -1,4 +1,4 @@
-package com.example.quotes.util
+package com.example.quotes.di
 
 import android.app.Application
 import androidx.room.Room
@@ -10,8 +10,8 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import com.example.quotes.storage.roomdata.QuotesDAO
 import com.example.quotes.storage.roomdata.QuotesDatabase
-import com.example.quotes.viewmodel.FavoriteViewModelFactory
-import com.example.quotes.viewmodel.QuotesViewModelFactory
+import com.example.quotes.util.ApiQuotes
+import com.example.quotes.util.Credential
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
