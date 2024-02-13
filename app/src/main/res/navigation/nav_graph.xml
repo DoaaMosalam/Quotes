@@ -7,12 +7,12 @@
 
     <fragment
         android:id="@+id/mainFragment"
-        android:name="com.example.quotes.mainFrgment.MainFragment"
+        android:name="com.example.quotes.ui.mainFrgment.MainFragment"
         android:label="MainFragment"
         tools:layout="@layout/fragment_main"></fragment>
     <fragment
         android:id="@+id/quotesFragment"
-        android:name="com.example.quotes.quotesFragment.QuotesFragment"
+        android:name="com.example.quotes.ui.quotesFragment.QuotesFragment"
         android:label="QuotesFragment"
         tools:layout="@layout/fragment_quotes">
         <action
@@ -25,7 +25,7 @@
     </fragment>
     <fragment
         android:id="@+id/favoriteFragment"
-        android:name="com.example.quotes.favoriteFragment.FavoriteFragment"
+        android:name="com.example.quotes.ui.favoriteFragment.FavoriteFragment"
         android:label="FavoriteFragment"
         tools:layout="@layout/fragment_favorite">
         <action

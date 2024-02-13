@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layoutDescription="@xml/fragment_main_xml_main_motion_layout_scene"
-        tools:context=".mainFrgment.MainFragment">
+        tools:context=".ui.mainFrgment.MainFragment">
 
         <TextView
             android:id="@+id/quotes_of_the_day"
