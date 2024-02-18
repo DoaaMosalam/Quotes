@@ -13,11 +13,11 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.quotes.R
 import com.example.quotes.databinding.FragmentFavoriteBinding
-import com.example.quotes.data.local.QuotesEntity
+import com.opportunity.data.local.QuotesEntity
 import com.example.quotes.domain.adapter.QuotesAdapter
-import com.example.quotes.domain.util.OnQuotesListener
-import com.example.quotes.domain.util.RequestStatus
-import com.example.quotes.ui.viewmodel.FavoriteViewModel
+import com.example.quotes.domain.adapter.OnQuotesListener
+import com.opportunity.domain.util.RequestStatus
+import com.example.quotes.viewmodel.FavoriteViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

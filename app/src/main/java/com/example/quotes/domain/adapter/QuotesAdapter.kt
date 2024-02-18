@@ -6,9 +6,8 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.quotes.databinding.RecyclerViewItemBinding
-import com.example.quotes.data.local.QuotesEntity
-import com.example.quotes.domain.util.OnQuotesListener
-import com.example.quotes.domain.util.ShareQuotes
+import com.opportunity.data.local.QuotesEntity
+import com.opportunity.domain.util.ShareQuotes
 
 class QuotesAdapter(private val listener: OnQuotesListener) :
     RecyclerView.Adapter<QuotesAdapter.QuotesViewHolder>() {

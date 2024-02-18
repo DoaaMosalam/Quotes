@@ -15,4 +15,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "Quotes"
 include(":app")
- 
+include(":data")
+include(":domain")

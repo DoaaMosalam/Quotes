@@ -12,11 +12,11 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.quotes.R
 import com.example.quotes.databinding.FragmentQuotesBinding
-import com.example.quotes.domain.model.Quotes
-import com.example.quotes.data.local.SharedPreferencesManager
-import com.example.quotes.data.local.QuotesEntity
-import com.example.quotes.domain.util.ShareQuotes
-import com.example.quotes.ui.viewmodel.QuotesViewModel
+import com.opportunity.domain.model.Quotes
+import com.opportunity.data.local.SharedPreferencesManager
+import com.opportunity.data.local.QuotesEntity
+import com.opportunity.domain.util.ShareQuotes
+import com.example.quotes.viewmodel.QuotesViewModel
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
