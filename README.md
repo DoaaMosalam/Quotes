@@ -16,7 +16,9 @@
          <p>Data Binding</a></p>
           <p><a href="https://developer.android.com/codelabs/android-room-with-a-view-kotlin#0">RoomDatabase</a></p>
       <p>Shared Preference</a></p>
+            <p>Singleton principles</a></p>
            <p><a href="https://developer.android.com/jetpack/androidx/releases/room#declaring_dependencies">Dependency Injection</a></p>
+      
        <hr>
        <h4>Video App </h4>
       
