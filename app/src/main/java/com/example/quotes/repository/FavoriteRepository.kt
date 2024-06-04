@@ -1,7 +1,7 @@
-package com.opportunity.data.repository
+package com.example.quotes.repository
 
-import com.opportunity.data.local.QuotesDAO
-import com.opportunity.data.local.QuotesEntity
+import com.example.quotes.local.QuotesDAO
+import com.example.quotes.local.QuotesEntity
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 

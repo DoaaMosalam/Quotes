@@ -1,4 +1,4 @@
-package com.opportunity.domain.util
+package com.example.quotes.util
 
 object Credential {
     // URL API QUOTES.

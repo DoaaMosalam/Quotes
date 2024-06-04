@@ -2,11 +2,6 @@ plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
     id("kotlin-kapt")
-    //navigation
-    id("androidx.navigation.safeargs.kotlin")
-    //dagger hilt
-    id("com.google.dagger.hilt.android")
-    id("dagger.hilt.android.plugin")
 }
 
 android {
@@ -39,39 +34,21 @@ android {
 }
 
 dependencies {
-
+    implementation(project(":domain"))
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.11.0")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
-    implementation(project(":domain"))
-    //View Model
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.7.0")
-    // ViewModel Factory
-    implementation("androidx.lifecycle:lifecycle-viewmodel-savedstate:2.7.0")
     //retrofit
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     //convert retrofit
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
-    //coroutines
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.7.3")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
-    //Gson
-    implementation("com.google.code.gson:gson:2.10.1")
     //room database
     implementation("androidx.room:room-runtime:2.6.1")
     kapt("androidx.room:room-compiler:2.6.1")
     implementation("androidx.room:room-common:2.6.1")
     implementation("androidx.room:room-ktx:2.6.1")
-    // Dagger Hilt dependencies
-    implementation("com.google.dagger:hilt-android:2.50")
-    kapt("com.google.dagger:hilt-android-compiler:2.50")
-    kapt("androidx.hilt:hilt-compiler:1.1.0")
-    implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
-    //for Serializable annotation using in type converter
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.2")
+
 }

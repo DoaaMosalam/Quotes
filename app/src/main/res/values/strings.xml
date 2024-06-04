@@ -5,4 +5,8 @@
     <string name="quotes_of_the_day">Quotes Of the Day</string>
     <string name="share_quote">Share Quote</string>
     <string name="favorite">Favorite</string>
+    <string name="ok">OK</string>
+    <string name="retry">Retry</string>
+    <string name="no_quotes_available">No Quotes Available</string>
+
 </resources>

@@ -1,4 +1,4 @@
-package com.opportunity.data.local
+package com.example.quotes.local
 
 
 import androidx.room.ColumnInfo

@@ -1,4 +1,4 @@
-package com.opportunity.domain.util
+package com.example.quotes.util
 
 import android.content.Context
 import android.content.Intent

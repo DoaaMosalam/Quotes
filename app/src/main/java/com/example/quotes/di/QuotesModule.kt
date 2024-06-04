@@ -2,11 +2,13 @@ package com.example.quotes.di
 
 import android.app.Application
 import androidx.room.Room
-import com.opportunity.data.local.QuotesDAO
-import com.opportunity.data.local.QuotesDatabase
-import com.opportunity.data.repository.FavoriteRepository
-import com.opportunity.data.repository.QuotesRepository
+import com.example.quotes.local.QuotesDAO
+import com.example.quotes.local.QuotesDatabase
+import com.example.quotes.repository.FavoriteRepository
+import com.example.quotes.repository.QuotesRepository
 import com.opportunity.data.remote.ApiQuotes
+
+
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -34,8 +36,8 @@ object QuotesModule {
 
     @Singleton
     @Provides
-    fun provideQuotesRepository(apiService: ApiQuotes, quotesDAO: QuotesDAO): QuotesRepository {
-        return QuotesRepository(apiService, quotesDAO)
+    fun provideQuotesRepository( quotesDAO: QuotesDAO): QuotesRepository {
+        return QuotesRepository( quotesDAO)
     }
 
     @Singleton

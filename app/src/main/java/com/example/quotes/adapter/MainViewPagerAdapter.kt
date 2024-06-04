@@ -1,4 +1,4 @@
-package com.example.quotes.domain.adapter
+package com.example.quotes.adapter
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager

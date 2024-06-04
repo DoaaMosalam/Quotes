@@ -1,13 +1,13 @@
-package com.example.quotes.viewmodel
+package com.example.quotes.ui.favoriteFragment
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
-import com.opportunity.data.repository.FavoriteRepository
-import com.opportunity.data.local.QuotesEntity
-import com.opportunity.domain.util.RequestStatus
+import com.example.quotes.repository.FavoriteRepository
+import com.example.quotes.local.QuotesEntity
+import com.example.quotes.util.RequestStatus
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject

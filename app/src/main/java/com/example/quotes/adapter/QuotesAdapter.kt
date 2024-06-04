@@ -1,13 +1,14 @@
-package com.example.quotes.domain.adapter
+package com.example.quotes.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.example.quotes.common.OnQuotesListener
 import com.example.quotes.databinding.RecyclerViewItemBinding
-import com.opportunity.data.local.QuotesEntity
-import com.opportunity.domain.util.ShareQuotes
+import com.example.quotes.local.QuotesEntity
+import com.example.quotes.util.ShareQuotes
 
 class QuotesAdapter(private val listener: OnQuotesListener) :
     RecyclerView.Adapter<QuotesAdapter.QuotesViewHolder>() {
