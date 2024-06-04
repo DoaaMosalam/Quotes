@@ -40,7 +40,7 @@ Quotes Screen 1       |  Save Quotes Screen 2
 
 
 
-Favorite Quotes Screen 2            | Share Quotes    | Delete Quotes
+Favorite Quotes Screen 2            | Share Quotes    | Search Quotes
 :-------------------------:|:-------------------------:|:-------------------------:
 <img src="https://github.com/DoaaMosalam/Quotes/assets/40686512/198fe4d5-d23f-40c2-9156-e1b853553b85" width="400" height="400"/> | <img src="https://github.com/DoaaMosalam/Quotes/assets/40686512/d7a97900-fbd0-4279-b9aa-b4ac79d9c13b" width="400" height="400" />  |  <img src="https://github.com/DoaaMosalam/Quotes/assets/40686512/47f19e93-9421-43bd-97b2-d3f4ac353c17" width="400" height="400" />
 </div>
