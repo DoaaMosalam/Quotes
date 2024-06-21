@@ -39,7 +39,7 @@ class FavoriteViewModel @Inject constructor
         }
     }
 
-    fun deleteSpecialQuoteByID(quoteId: String) {
+    fun deleteSpecialQuoteByID(quoteId: Long) {
         viewModelScope.launch {
             try {
                 quoteUseCaseData.deleteQuoteById(quoteId)

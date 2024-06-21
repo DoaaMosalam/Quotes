@@ -23,9 +23,9 @@ class QuotesRepoImplData(private val quotesDAO: QuotesDAO) : QuotesRepoData {
     }
 
 
-        override suspend fun deleteQuoteById(quoteId: String) = quotesDAO.deleteQuoteById(quoteId)
+        override suspend fun deleteQuoteById(quoteId: Long) = quotesDAO.deleteQuoteById(quoteId)
     private fun QuotesEntity.toDomain() = Quotes(
-        _id, author, content, tags, authorSlug, length, dateAdded, dateModified
+        _id,id,author, content, tags, authorSlug, length, dateAdded, dateModified
     )
 
     private fun Quotes.toEntity() = QuotesEntity(

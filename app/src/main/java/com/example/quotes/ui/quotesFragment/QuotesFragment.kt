@@ -169,7 +169,7 @@ class QuotesFragment : BaseFragment<FragmentQuotesBinding, QuotesViewModel>(), V
         if (this::currentQuotes.isInitialized) {
             val currentQuote = Quotes(
                 _id = currentQuotes._id,
-//                id = currentQuotes.id,
+                id = currentQuotes.id,
                 author = currentQuotes.author,
                 content = currentQuotes.content,
                 tags = currentQuotes.tags,

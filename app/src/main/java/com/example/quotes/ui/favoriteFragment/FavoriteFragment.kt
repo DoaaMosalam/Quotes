@@ -80,7 +80,7 @@ class FavoriteFragment : BaseFragment<FragmentFavoriteBinding, FavoriteViewModel
     }
 
     override fun onRemoveClick(quotes: Quotes) {
-        viewModel.deleteSpecialQuoteByID(quotes._id)
+        viewModel.deleteSpecialQuoteByID(quotes.id!!)
         quotesAdapter.notifyDataSetChanged()
     }
 

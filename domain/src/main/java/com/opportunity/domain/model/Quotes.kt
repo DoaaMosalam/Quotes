@@ -8,6 +8,7 @@ import kotlinx.serialization.Serializable
 data class Quotes(
     @SerializedName("_id")
     var _id: String,
+    var id:Long?,
     val author: String,
     val content: String,
     val tags: List<String>,

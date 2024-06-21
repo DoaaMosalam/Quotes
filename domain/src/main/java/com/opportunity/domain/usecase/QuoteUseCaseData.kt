@@ -10,7 +10,7 @@ class QuoteUseCaseData(private val quotesRepoData: QuotesRepoData) {
     suspend fun insertQuoteToData(quotes: Quotes) = quotesRepoData.insertQuoteToData(quotes)
 
     suspend fun searchQuotes(query:String) = quotesRepoData.searchQuotes(query)
-    suspend fun deleteQuoteById(quoteId: String) = quotesRepoData.deleteQuoteById(quoteId)
+    suspend fun deleteQuoteById(quoteId: Long) = quotesRepoData.deleteQuoteById(quoteId)
 
 
 }

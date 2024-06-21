@@ -23,5 +23,5 @@ interface QuotesDAO {
 
     // Delete a specific quote from the database by ID
     @Query("DELETE FROM QUOTES_TABLE WHERE id = :quoteId")
-    suspend fun deleteQuoteById(quoteId: String)
+    suspend fun deleteQuoteById(quoteId: Long)
 }
