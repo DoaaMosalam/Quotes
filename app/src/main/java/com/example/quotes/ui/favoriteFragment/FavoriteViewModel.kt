@@ -5,9 +5,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
-import com.example.quotes.repository.FavoriteRepository
-import com.example.quotes.local.QuotesEntity
 import com.example.quotes.util.RequestStatus
+import com.opportunity.domain.model.Quotes
+import com.opportunity.domain.usecase.QuoteUseCaseData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -15,30 +15,41 @@ import javax.inject.Inject
 @HiltViewModel
 class FavoriteViewModel @Inject constructor
     (
-    private val repository: FavoriteRepository
+            private val quoteUseCaseData: QuoteUseCaseData
+//    private val repository: FavoriteRepository
 ) : ViewModel() {
     private val _isLoad = MutableLiveData<Boolean>().apply { value = false }
 
-    private val _quotesList = MutableLiveData<RequestStatus<List<QuotesEntity>>>()
+    private val _quotesList = MutableLiveData<RequestStatus<List<Quotes>>>()
     val isLoad: LiveData<Boolean> get() = _isLoad
-    val quotesList: LiveData<RequestStatus<List<QuotesEntity>>> get() = _quotesList
+    val quotesList: LiveData<RequestStatus<List<Quotes>>> get() = _quotesList
 
     fun getAllQuotesFromDatabase() {
         viewModelScope.launch {
-            repository.getAllQuotesFromDatabase().collect {
-                _isLoad.postValue(true)
-                _quotesList.postValue(RequestStatus.Success(it))
+            _isLoad.postValue(true)
+            try {
+                quoteUseCaseData.getAllQuotesFromData().collect { quotes ->
+                    _quotesList.postValue(RequestStatus.Success(quotes))
+                }
+            } catch (e: Exception) {
+                _quotesList.postValue(RequestStatus.Error(e.message.toString()))
+            } finally {
+                _isLoad.postValue(false)
             }
         }
     }
 
-    fun deleteSpecialQuoteByID(quoteId: Long) {
+    fun deleteSpecialQuoteByID(quoteId: String) {
         viewModelScope.launch {
-            repository.deleteQuoteById(quoteId)
+            try {
+                quoteUseCaseData.deleteQuoteById(quoteId)
+            } catch (e: Exception) {
+                // Handle error if needed
+            }
         }
     }
-    //fun searchQuotes() search quotes from database by author and content
-    fun searchQuotes(searchQuery: String): LiveData<List<QuotesEntity>> {
-        return repository.searchQuotesIntoDatabase(searchQuery).asLiveData()
+
+    suspend fun searchQuotes(searchQuery: String): LiveData<List<Quotes>> {
+        return quoteUseCaseData.searchQuotes(searchQuery).asLiveData()
     }
 }

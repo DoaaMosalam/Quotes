@@ -2,11 +2,13 @@ package com.example.quotes.di
 
 import android.app.Application
 import androidx.room.Room
-import com.example.quotes.local.QuotesDAO
-import com.example.quotes.local.QuotesDatabase
-import com.example.quotes.repository.FavoriteRepository
-import com.example.quotes.repository.QuotesRepository
+import com.opportunity.data.local.QuotesDAO
+import com.opportunity.data.local.QuotesDatabase
 import com.opportunity.data.remote.ApiQuotes
+import com.opportunity.data.repo.QuotesRepoImplData
+import com.opportunity.domain.repo.QuotesRepoData
+import com.opportunity.domain.usecase.QuoteUseCaseData
+import com.opportunity.domain.usecase.QuotesUseCase
 
 
 import dagger.Module
@@ -33,16 +35,24 @@ object QuotesModule {
     fun provideQuotesDAO(quotesDatabase: QuotesDatabase): QuotesDAO {
         return quotesDatabase.quotesDatabaseDao()
     }
-
-    @Singleton
     @Provides
-    fun provideQuotesRepository( quotesDAO: QuotesDAO): QuotesRepository {
-        return QuotesRepository( quotesDAO)
+    fun provideQuotesRepoData(quotesDAO: QuotesDAO): QuotesRepoData {
+        return QuotesRepoImplData(quotesDAO)
+    }
+    @Provides
+    fun provideQuoteUseCaseData(quotesRepoData: QuotesRepoData):QuoteUseCaseData{
+        return QuoteUseCaseData(quotesRepoData)
     }
 
-    @Singleton
-    @Provides
-    fun provideFavoriteRepository(quotesDAO: QuotesDAO): FavoriteRepository {
-        return FavoriteRepository(quotesDAO)
-    }
+//    @Singleton
+//    @Provides
+//    fun provideQuotesRepository( quotesDAO: QuotesDAO): QuotesRepository {
+//        return QuotesRepository( quotesDAO)
+//    }
+
+//    @Singleton
+//    @Provides
+//    fun provideFavoriteRepository(quotesDAO: QuotesDAO): FavoriteRepository {
+//        return FavoriteRepository(quotesDAO)
+//    }
 }

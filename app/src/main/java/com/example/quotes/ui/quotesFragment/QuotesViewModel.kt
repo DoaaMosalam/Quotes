@@ -5,8 +5,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.opportunity.domain.model.Quotes
-import com.example.quotes.repository.QuotesRepository
-import com.example.quotes.local.QuotesEntity
+import com.opportunity.domain.usecase.QuoteUseCaseData
 import com.opportunity.domain.usecase.QuotesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -19,7 +18,8 @@ import javax.inject.Inject
 @HiltViewModel
 class QuotesViewModel @Inject constructor(
     private val quotesUseCase: QuotesUseCase,
-    private val repository: QuotesRepository
+
+    private val quoteUseCaseData: QuoteUseCaseData
 ) : ViewModel() {
 
     private val _isLoad = MutableSharedFlow<Boolean>()
@@ -48,9 +48,10 @@ class QuotesViewModel @Inject constructor(
 
     //=============================================================================================
     //  this method insert quotes to database
-    fun insertQuotesToDatabase(quotes: QuotesEntity) {
+    fun insertQuotesToDatabase(quotes: Quotes) {
         viewModelScope.launch {
-            repository.insertQuoteToDatabase(quotes)
+//            repository.insertQuoteToDatabase(quotes)
+            quoteUseCaseData.insertQuoteToData(quotes)
         }
     }
 

@@ -9,12 +9,12 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.quotes.R
 import com.example.quotes.databinding.FragmentFavoriteBinding
-import com.example.quotes.local.QuotesEntity
 import com.example.quotes.adapter.QuotesAdapter
 import com.example.quotes.common.BaseFragment
 import com.example.quotes.common.OnQuotesListener
 import com.example.quotes.util.RequestStatus
 import com.example.quotes.util.showSnakeBarError
+import com.opportunity.domain.model.Quotes
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -70,7 +70,6 @@ class FavoriteFragment : BaseFragment<FragmentFavoriteBinding, FavoriteViewModel
                 is RequestStatus.Error -> {
                     binding.progressBar.isVisible = false
                     view?.showSnakeBarError(it.message)
-//                    Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
                 }
 
                 is RequestStatus.Waiting -> {
@@ -80,25 +79,27 @@ class FavoriteFragment : BaseFragment<FragmentFavoriteBinding, FavoriteViewModel
         }
     }
 
-
-    // function to delete a quote from the database
-    override fun onRemoveClick(quotesEntity: QuotesEntity) {
-        viewModel.deleteSpecialQuoteByID(quotesEntity.id!!)
+    override fun onRemoveClick(quotes: Quotes) {
+        viewModel.deleteSpecialQuoteByID(quotes._id)
         quotesAdapter.notifyDataSetChanged()
     }
 
     private fun searchEditText() {
         binding.edSearchQuotes.addTextChangedListener { text ->
-            searchQuotes(text.toString())
+            lifecycleScope.launch {
+                searchQuotes(text.toString())
+            }
         }
     }
 
-    private fun searchQuotes(query: String) {
+    private suspend fun searchQuotes(query: String) {
         val searchQuery = "%$query%"
         viewModel.searchQuotes(searchQuery).observe(viewLifecycleOwner) { quotes ->
             quotesAdapter.differ.submitList(quotes)
         }
     }
+
+
 
 }
 

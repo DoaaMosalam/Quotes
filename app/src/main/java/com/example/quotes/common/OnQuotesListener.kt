@@ -1,7 +1,8 @@
 package com.example.quotes.common
 
-import com.example.quotes.local.QuotesEntity
+import com.opportunity.data.local.QuotesEntity
+import com.opportunity.domain.model.Quotes
 
 interface OnQuotesListener {
-    fun onRemoveClick(quotesEntity: QuotesEntity)
+    fun onRemoveClick(quotes: Quotes)
 }

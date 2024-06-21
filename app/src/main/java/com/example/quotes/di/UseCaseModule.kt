@@ -11,7 +11,7 @@ import dagger.hilt.components.SingletonComponent
 @InstallIn(SingletonComponent::class)
 object UseCaseModule {
     @Provides
-    fun ProvideAuotesUseCase(quotesRepo: QuotesRepo):QuotesUseCase{
+    fun ProvideQuotesUseCase(quotesRepo: QuotesRepo):QuotesUseCase{
         return QuotesUseCase(quotesRepo)
     }
 }

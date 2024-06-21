@@ -1,4 +1,4 @@
-package com.example.quotes.local
+package com.opportunity.data.local
 
 
 import androidx.room.TypeConverter

@@ -10,8 +10,8 @@ import com.example.quotes.R
 import com.example.quotes.common.BaseFragment
 import com.example.quotes.databinding.FragmentQuotesBinding
 import com.opportunity.domain.model.Quotes
-import com.example.quotes.local.SharedPreferencesManager
-import com.example.quotes.local.QuotesEntity
+import com.example.quotes.SharedPreferencesManager
+import com.opportunity.data.local.QuotesEntity
 import com.example.quotes.util.ShareQuotes
 import com.example.quotes.util.showSnakeBarError
 import com.example.quotes.util.showSnakeBarMessage
@@ -167,9 +167,9 @@ class QuotesFragment : BaseFragment<FragmentQuotesBinding, QuotesViewModel>(), V
 
     private fun saveFavoriteQuoteToDatabase() {
         if (this::currentQuotes.isInitialized) {
-            val currentQuote = QuotesEntity(
+            val currentQuote = Quotes(
                 _id = currentQuotes._id,
-                id = currentQuotes.id,
+//                id = currentQuotes.id,
                 author = currentQuotes.author,
                 content = currentQuotes.content,
                 tags = currentQuotes.tags,

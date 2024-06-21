@@ -1,4 +1,4 @@
-package com.example.quotes.local
+package com.opportunity.data.local
 
 import androidx.room.Dao
 import androidx.room.Insert
@@ -23,5 +23,5 @@ interface QuotesDAO {
 
     // Delete a specific quote from the database by ID
     @Query("DELETE FROM QUOTES_TABLE WHERE id = :quoteId")
-    suspend fun deleteQuoteById(quoteId: Long)
+    suspend fun deleteQuoteById(quoteId: String)
 }

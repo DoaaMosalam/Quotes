@@ -1,8 +1,7 @@
-package com.example.quotes.local
+package com.example.quotes
 
 import android.content.Context
 import android.content.SharedPreferences
-import com.example.quotes.util.Credential
 
 class SharedPreferencesManager(mCtx: Context) {
 
