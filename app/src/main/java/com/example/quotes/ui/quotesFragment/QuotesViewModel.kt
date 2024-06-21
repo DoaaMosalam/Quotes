@@ -50,7 +50,6 @@ class QuotesViewModel @Inject constructor(
     //  this method insert quotes to database
     fun insertQuotesToDatabase(quotes: Quotes) {
         viewModelScope.launch {
-//            repository.insertQuoteToDatabase(quotes)
             quoteUseCaseData.insertQuoteToData(quotes)
         }
     }
