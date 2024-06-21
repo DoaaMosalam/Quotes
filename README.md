@@ -6,13 +6,49 @@
       </p>
      <p>The Quotes app is a beautifully designed and user-friendly application developed using Kotlin, the modern programming language for Android development.
        This app aims to provide users with a seamless experience of discovering, saving, and sharing inspirational quotes effortlessly.</p>
-     <h2>Best practice<h2/>
+    
+  ## Project Structure
+<div align="center">
+ <img src="https://github.com/DoaaMosalam/Quotes/assets/40686512/93feb519-da35-4e90-b764-a049de6da98b" width="400" height="300" alt="Project Structure"/>
+</div>
+
+```groovy
+app/
+    src/
+        main/
+            java/
+                com/example/app/
+                    di/
+                    ui/
+                    viewmodel/
+                    MainActivity.kt
+data/
+    src/
+        main/
+            java/
+                com/example/data/
+                    remote/
+                    local/
+                        db/
+                        entities/
+                        dao/
+                    repository/
+domain/
+    src/
+        main/
+            java/
+                com/example/domain/
+                    model/
+                    repository/
+                    usecase/
+```
+ <h2>Best practice<h2/>
        <p> -try to not taking any code as copy-paste here is like a helper to you.</p> 
        <p> -Please make sure to try it yourself first.</p>
          <h3> Used Libraries</h3>
        <p>
            <p>RestFullAPI</a></p>
-                   <p><a href ="https://kotlinlang.org/">- Kotlin Language</a></p>
+           <p><a href ="https://kotlinlang.org/">- Kotlin Language</a></p>
          <a href="https://square.github.io/retrofit/"> - Retrofit</a></p>
        <p><a href= "https://developer.android.com/topic/architecture?gclsrc=ds">-MVVM</a></p>
       <p><a href="https://developer.android.com/jetpack/androidx/releases/recyclerview">-RecyclerView</a></p>
@@ -25,11 +61,12 @@
        <p><a href= "https://developer.android.com/topic/architecture?gclsrc=ds](https://developer.android.com/kotlin/coroutines">- Coroutines</a></p>
        <p><a href= "https://developer.android.com/topic/libraries/architecture/viewmodels">-ViewModel</a></p>
         <p><a href="https://www.themoviedb.org/](https://en.wikipedia.org/wiki/SOLID">- SOLID Principles</a></p> 
-  
-       ## Preview
+    
+      
+## Preview
 <div align="center">
      
-https://github.com/DoaaMosalam/Quotes/assets/40686512/d6b21481-22e0-4a48-b138-81a410dc71aa
+   https://github.com/DoaaMosalam/Quotes/assets/40686512/d6b21481-22e0-4a48-b138-81a410dc71aa
 Splash Screen 1          |  Loading Quotes Screen 2   
 :-------------------------:|:-------------------------:
 <img src="https://github.com/DoaaMosalam/Quotes/assets/40686512/d1a3afaa-fd12-48b3-a60f-2134fb5b2035" width="400" height="400" /> | <img src="https://github.com/DoaaMosalam/Quotes/assets/40686512/ad8b7a0d-c5be-4e8d-9514-bc971e2dea2d" width="400" height="400" /> 
