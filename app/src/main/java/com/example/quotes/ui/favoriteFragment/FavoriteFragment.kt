@@ -8,10 +8,10 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.quotes.R
-import com.example.quotes.databinding.FragmentFavoriteBinding
 import com.example.quotes.adapter.QuotesAdapter
 import com.example.quotes.common.BaseFragment
 import com.example.quotes.common.OnQuotesListener
+import com.example.quotes.databinding.FragmentFavoriteBinding
 import com.example.quotes.util.RequestStatus
 import com.example.quotes.util.showSnakeBarError
 import com.opportunity.domain.model.Quotes

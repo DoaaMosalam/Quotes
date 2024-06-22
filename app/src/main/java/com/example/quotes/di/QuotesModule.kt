@@ -1,16 +1,13 @@
 package com.example.quotes.di
 
+
 import android.app.Application
 import androidx.room.Room
 import com.opportunity.data.local.QuotesDAO
 import com.opportunity.data.local.QuotesDatabase
-import com.opportunity.data.remote.ApiQuotes
 import com.opportunity.data.repo.QuotesRepoImplData
 import com.opportunity.domain.repo.QuotesRepoData
 import com.opportunity.domain.usecase.QuoteUseCaseData
-import com.opportunity.domain.usecase.QuotesUseCase
-
-
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -43,16 +40,4 @@ object QuotesModule {
     fun provideQuoteUseCaseData(quotesRepoData: QuotesRepoData):QuoteUseCaseData{
         return QuoteUseCaseData(quotesRepoData)
     }
-
-//    @Singleton
-//    @Provides
-//    fun provideQuotesRepository( quotesDAO: QuotesDAO): QuotesRepository {
-//        return QuotesRepository( quotesDAO)
-//    }
-
-//    @Singleton
-//    @Provides
-//    fun provideFavoriteRepository(quotesDAO: QuotesDAO): FavoriteRepository {
-//        return FavoriteRepository(quotesDAO)
-//    }
 }

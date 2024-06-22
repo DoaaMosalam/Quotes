@@ -8,8 +8,8 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
 import com.example.quotes.R
-import com.example.quotes.databinding.FragmentMainBinding
 import com.example.quotes.adapter.MainViewPagerAdapter
+import com.example.quotes.databinding.FragmentMainBinding
 import com.google.android.material.tabs.TabLayout
 import dagger.hilt.android.AndroidEntryPoint
 

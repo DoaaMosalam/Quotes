@@ -17,7 +17,6 @@ data class Quotes(
     val dateAdded: String,
     val dateModified: String,
 )
-
 data class QuotesResponse(
     val count: Int,
     val totalCount: Int,

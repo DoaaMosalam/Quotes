@@ -7,14 +7,14 @@ import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.example.quotes.R
+import com.example.quotes.SharedPreferencesManager
 import com.example.quotes.common.BaseFragment
 import com.example.quotes.databinding.FragmentQuotesBinding
-import com.opportunity.domain.model.Quotes
-import com.example.quotes.SharedPreferencesManager
-import com.opportunity.data.local.QuotesEntity
 import com.example.quotes.util.ShareQuotes
 import com.example.quotes.util.showSnakeBarError
 import com.example.quotes.util.showSnakeBarMessage
+import com.opportunity.data.local.QuotesEntity
+import com.opportunity.domain.model.Quotes
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 

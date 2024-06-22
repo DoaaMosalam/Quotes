@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.quotes.common.OnQuotesListener
 import com.example.quotes.databinding.RecyclerViewItemBinding
-import com.opportunity.data.local.QuotesEntity
 import com.example.quotes.util.ShareQuotes
 import com.opportunity.domain.model.Quotes
 
